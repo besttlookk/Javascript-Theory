@@ -39,13 +39,54 @@
   - Symbol type
 - Objects (collections of properties)
 
-## Primitive values
+## Primitive
 
-- All types except objects define immutable values (that is, values which can't be changed).
+- In JavaScript, a primitive (primitive value, primitive data type) is data that is **not an object and has no methods.**
+- There are 7 primitive data types:
+
+  1. string,
+  2. number,
+  3. bigint,
+  4. boolean,
+  5. undefined,
+  6. symbol, and
+  7. null.
+
 - We refer to values of these types as "primitive values".
+- Most of the time, a primitive value is represented directly at the lowest level of the language implementation.
 
-- A primitive value is a value that has no properties or methods.
-- A primitive data type is data that has a primitive value.
+- All primitives are **immutable**, i.e., they cannot be altered.
+- It is important not to confuse a primitive itself with a variable assigned a primitive value. The variable may be reassigned a new value, but the existing value can not be changed in the ways that objects, arrays, and functions can be altered.
+- This example will help you understand that primitive values are immutable
+
+```
+// Using a string method doesn't mutate the string
+var bar = "baz";
+console.log(bar);               // baz
+bar.toUpperCase();
+console.log(bar);               // baz
+
+// Using an array method mutates the array
+var foo = [];
+console.log(foo);               // []
+foo.push("plugh");
+console.log(foo);               // ["plugh"]
+
+// Assignment gives the primitive a new (not a mutated) value
+bar = bar.toUpperCase();       // BAZ
+```
+
+- A primitive can be replaced, but it can't be directly altered.
+
+### Primitive wrapper objects in JavaScript
+
+- Except for null and undefined, all primitive values have object equivalents that wrap around the primitive values:
+  - **_String_** for the string primitive.
+  - **_Number_** for the number primitive.
+  - **_BigInt_** for the bigint primitive.
+  - **Boolean** for the boolean primitive.
+  - **Symbol** for the symbol primitive.
+- The wrapper's valueOf() method returns the primitive value.
 
 ## Objects
 

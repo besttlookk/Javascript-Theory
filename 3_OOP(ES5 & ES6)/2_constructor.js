@@ -1,28 +1,6 @@
 /*
 --------------------------JavaScript Constructor Method----------------------
-A JavaScript constructor method is a special type of method which is used to initialize and create an object. 
-It is called when memory is allocated for an object.
 
-Points to remember:
-  1.The constructor keyword is used to declare a constructor method.
-  2.The class can contain one constructor method only.
-  3. JavaScript allows us to use parent class constructor through super keyword.
-
-Note - If we didn't specify any constructor method, JavaScript use default constructor method.
-
-
-// It is basically just a function (this is also is ES5):  can make as many object through construtor
-// to differntiate "constructor" from the " function" we use UPPERCASE in constrctor
-// Only difference between both is that we call constructor function with "new" operator
-// We can use both function declaration and function expression to define constructor function.
-// But array function will not work as fujction constructor(bcoz it doesnot have its own this keyword)
-
----new opearator
-It is a very special operator .It does 4 things behind the scene
-    1. new empty object is created.
-    2. function is called.And in this.."this" is equal to the newly created object // this = {}
-    3. newly created object is linked to the prototype // this will create __proto__ property on objects and sets the value equal to prototype of constructor function
-    4. function automaticaaly returns the object after adding properties
 */
 
 function Book(title, author, year) {

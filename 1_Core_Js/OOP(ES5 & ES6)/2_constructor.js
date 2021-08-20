@@ -1,13 +1,10 @@
-// It is basically just a function (this is also is ES5):  can make as many object through construtor
-// to differntiate "constructor" from the " function" we use UPPERCASE in constrctor
-
 function Book(title, author, year) {
-  this.title = title
-  this.author = author
-  this.year = year
+  this.title = title;
+  this.author = author;
+  this.year = year;
   this.getSummary = function () {
-    return `${this.title} was written by ${this.author} in ${this.year}`
-  }
+    return `${this.title} was written by ${this.author} in ${this.year}`;
+  };
 }
 
 // --Whenever we create a function(generic or contructor), two objects are automatically created
@@ -17,11 +14,11 @@ function Book(title, author, year) {
 
 //-- extensite the object... this way we can easily create any number of books using keyword 'new'
 // -- __proto__ object is created automatically which point to the "prototype" of the constuctor function
-const book1 = new Book('Book 1', 'John Doe', 2013)
-console.log(book1)
-console.log(book1.__proto__)
+const book1 = new Book("Book 1", "John Doe", 2013);
+console.log(book1);
+console.log(book1.__proto__);
 // console.log(book1.prototype)  // undefined....sirf main function ka prototype object hota
-console.log(book1.__proto__ === Book.prototype) // true, bcoz extensited object points to the prototype object of constructor function
+console.log(book1.__proto__ === Book.prototype); // true, bcoz extensited object points to the prototype object of constructor function
 
 // const book2 = new Book('Book 2','Cohleo Pole',2010)
 // console.log(book2);

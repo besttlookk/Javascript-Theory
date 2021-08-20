@@ -15,26 +15,26 @@
       document.getElementById("btn").addEventListener("click", makerequest);
 
       //   ----using onload propety of XHR object
-      //   function makerequest() {
-      //     var xhr = new XMLHttpRequest();
-      //     xhr.open("GET", "data.txt", true);
+      // function makerequest() {
+      //   var xhr = new XMLHttpRequest();
+      //   xhr.open("GET", "data.txt", true);
 
-      //     // it defines a function to be called(by XHR object) when the request is received(loaded)
-      //     // means jab readyState === 4 hoga tab ja ker ye callack function run hoga
-      //     xhr.onload = function () {
-      //       console.log(this); // XMLHttpRequest Object
-      //       console.log(this.status); // 200 or 404
-      //       console.log(this.statusText); // OK or Not Found
-      //       console.log(this.readyState); // 4
-      //       if (this.status == 200) {
-      //         var data = this.responseText;
-      //         document.getElementById("data").innerHTML = data;
-      //       } else {
-      //         console.log("Something went wrong");
-      //       }
-      //     };
-      //     xhr.send();
-      //   }
+      //   // it defines a function to be called(by XHR object) when the request is received(loaded)
+      //   // means jab readyState === 4 hoga tab ja ker ye callack function run hoga
+      //   xhr.onload = function () {
+      //     console.log(this); // XMLHttpRequest Object
+      //     console.log(this.status); // 200 or 404
+      //     console.log(this.statusText); // OK or Not Found
+      //     console.log(this.readyState); // 4
+      //     if (this.status == 200) {
+      //       var data = this.responseText;
+      //       document.getElementById("data").innerHTML = data;
+      //     } else {
+      //       console.log("Something went wrong");
+      //     }
+      //   };
+      //   xhr.send();
+      // }
 
       //========using onreadystatechange property of XHR object==============================
 

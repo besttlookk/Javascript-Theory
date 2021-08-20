@@ -1,13 +1,4 @@
-/*
-// WHAT IF we want to create a different constructor which want to inherit some properties from other constructor(like Car constrctor inheriets Vehicle Constructor )
-  Inhertance between class:
-  1. Using Constructor function
-  2. Using ES5 classes
-  3. Object.create
-
-*/
-
-//================================================1. Constructor funtion ==================================================================
+// =========Inheritence using Constructor ==================
 // --1st Constructor
 function Book(title, author, year) {
   this.title = title;

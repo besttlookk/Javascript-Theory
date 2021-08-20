@@ -1,8 +1,6 @@
-
 const posts = [
-    { title: 'Post One', body: 'This is post one' },
-    { title: 'Post two', body: 'This is post two' }
-
+  { title: "Post One", body: "This is post one" },
+  { title: "Post two", body: "This is post two" },
 ];
 
 // // we memiking how is it to fetch from the sever..it may takes some time....thats why we are using "setTimeout" here
@@ -32,12 +30,10 @@ const posts = [
 // getPosts();
 
 // we wanted to have create post first but due to delay..getpost request happened first..
-//.this kind of sitution can happen in real world..this is where asych programming comes in like 'CALLBACK ' funtion to handle it..it will hold 
-// "getPosts" request till it created the post 
-
+//.this kind of sitution can happen in real world..this is where asych programming comes in like 'CALLBACK ' funtion to handle it..it will hold
+// "getPosts" request till it created the post
 
 // ====================callback[Async}-------------------
-
 
 // function getPosts() {
 //     setTimeout(() => {
@@ -49,7 +45,6 @@ const posts = [
 //     }, 1000);
 // }
 
-
 // create another function
 //  function createPost(post,callback) {
 //    setTimeout(() => {
@@ -58,9 +53,8 @@ const posts = [
 //     }, 2000);
 // }
 
-//this is the way of doing it
+// this is the way of doing it
 // createPost({ title: 'Post three', body: 'This is post three' } ,getPosts);
-
 
 // ==========================================HARRY=================================================
 // Pretend that this response is coming from the server
@@ -68,7 +62,6 @@ const posts = [
 //     {name: "harry", subject: "JavaScript"},
 //     {name: "Rohan", subject: "Machine Learning"}
 // ]
-
 
 // function enrollStudent(student, callback) // ye "getstudent" fuction ko pkr ker rakhega..background me chalne nahi dega
 // {
@@ -79,7 +72,7 @@ const posts = [
 //     }, 8000);
 // }
 
-// // to fetch student list  // i want to run this fuction after "enrollStudent" funcion. even thou this function takes less time to complete...it will wait for the callback to execute itself. 
+// // to fetch student list  // i want to run this fuction after "enrollStudent" funcion. even thou this function takes less time to complete...it will wait for the callback to execute itself.
 // function getStudents(){
 //     setTimeout(function() {
 //         let str = "";
@@ -93,4 +86,3 @@ const posts = [
 
 // let newStudent = {name:"Sunny", subject:"Python"}
 // enrollStudent(newStudent, getStudents);
-
