@@ -1,20 +1,22 @@
 # Object.isSealed()
 
-- The Object.isSealed() method determines if an object is sealed.
-- return A Boolean indicating whether or not the given object is sealed.
-- Returns true if the object is sealed, otherwise false. An object is sealed if it is not extensible and if all its properties are non-configurable and therefore not removable (but not necessarily non-writable).
+The Object.isSealed() method determines if an object is sealed.
+
+Return A Boolean indicating whether or not the given object is sealed.
+
+An object is sealed if it is not extensible and if all its properties are non-configurable and therefore not removable **(but not necessarily non-writable).**
 
 #### **SYNTAX**
 
-```
-Object.isSealed(obj)
+```js
+Object.isSealed(obj);
 ```
 
 #### **EXAMPLES**
 
 > > **Using Object.isSealed**
 
-```
+```js
 // Objects aren't sealed by default.
 var empty = {};
 Object.isSealed(empty); // === false
@@ -26,14 +28,14 @@ Object.isSealed(empty); // === true
 
 // The same is not true of a non-empty object,
 // unless its properties are all non-configurable.
-var hasProp = { fee: 'fie foe fum' };
+var hasProp = { fee: "fie foe fum" };
 Object.preventExtensions(hasProp);
 Object.isSealed(hasProp); // === false
 
 // But make them all non-configurable
 // and the object becomes sealed.
-Object.defineProperty(hasProp, 'fee', {
-  configurable: false
+Object.defineProperty(hasProp, "fee", {
+  configurable: false,
 });
 Object.isSealed(hasProp); // === true
 
@@ -55,7 +57,11 @@ var s2 = Object.seal({ p: 3 });
 Object.isFrozen(s2); // === false
 // ('p' is still writable)
 
-var s3 = Object.seal({ get p() { return 0; } });
+var s3 = Object.seal({
+  get p() {
+    return 0;
+  },
+});
 Object.isFrozen(s3); // === true
 // (only configurability matters for accessor properties)
 ```

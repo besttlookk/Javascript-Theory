@@ -39,26 +39,26 @@ console.log(counter.max); // undefined
 
 `Note that you need to surround the property name of the object with single or double quotes.`
 
-```
+```js
 let counter = {
-   current: 0
+  current: 0,
 };
 
-if('max' in counter) {
-    console.log(counter.max);
+if ("max" in counter) {
+  console.log(counter.max);
 }
 ```
 
 `If you want to assign a default value when the property of an object doesn’t exist, you can use the nullish coalescing operator (??):`
 
-```
+```js
 const propValue = object.propName ?? defaultValue;
 ```
 
-- In this syntax, the nullish coalesing operator (??) returns the defaultValue if the object.propName is undefined or null.
+- In this syntax, the nullish coalesing operator (??) returns the defaultValue if the object.propName is **undefined or null.**
 - Note that the nullish coalescing operator has been available since ECMAScript 2020.
 
-```
+```js
 let counter = { current: 0 };
 const max = counter.max ?? 100;
 ```
@@ -67,29 +67,28 @@ const max = counter.max ?? 100;
 
 - When you call a function with a number of parameters, you often pass the same number of arguments. For example:
 
-```
+```js
 const formatCurrency = (amount, currency) => {
-   return currency === '$' ?
-     `$${amount}`: `${amount} ${currency}`;
-}
+  return currency === "$" ? `$${amount}` : `${amount} ${currency}`;
+};
 ```
 
 - The formatCurrency() function has two parameters. When you call it, you pass two arguments like this:
 
-```
-formatCurrency(100,'$'); //
-$100
+```js
+formatCurrency(100, "$"); //
+$100;
 ```
 
 And it returned a result as expected.
 
 - But when you call the formatCurrency() function and don’t pass all the arguments, the parameters inside the function becomes undefined. For example:
 
-```
+```js
 formatCurrency(100); // 100 undefined
 ```
 
-- To avoid this kind of situation, you set a default value for the function parameters like this:
+- To avoid this kind of situation, you set a **default value for the function parameters** like this:
 
 ```
 const formatCurrency = (amount, currency = '$') => {

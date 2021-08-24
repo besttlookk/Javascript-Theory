@@ -4,41 +4,40 @@
 
 #### **SYNTAX**
 
-```
-Object.defineProperties(obj, props)
+```js
+Object.defineProperties(obj, props);
 ```
 
 #### **EXAMPLES**
 
 > > **Using Object.defineProperties**
 
-```
+```js
 var obj = {};
 Object.defineProperties(obj, {
-  'property1': {
+  property1: {
     value: true,
-    writable: true
+    writable: true,
   },
-  'property2': {
-    value: 'Hello',
-    writable: false
-  }
+  property2: {
+    value: "Hello",
+    writable: false,
+  },
   // etc. etc.
 });
 ```
 
-```
+```js
 const object1 = {};
 
 Object.defineProperties(object1, {
   property1: {
     value: 42,
-    writable: true
+    writable: true,
   },
-  property2: {}
+  property2: {},
 });
 
 console.log(object1.property1);
 // expected output: 42
-
 ```

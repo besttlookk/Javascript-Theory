@@ -49,6 +49,8 @@ console.log(value + " -> " + typeof value)  // undefined -> undefined 
 ## Primitive Type / Value Type
 
 - In JavaScript, a primitive (primitive value, primitive data type) is data that is **not an object and has no methods.**
+- Primitives are **passed by value**, meaning their values are copied and then placed somewhere else in the memory.
+- They are also **compared by value.**
 - There are 7 primitive data types:
 
   1. string,
@@ -63,6 +65,7 @@ console.log(value + " -> " + typeof value)  // undefined -> undefined 
 - Most of the time, a primitive value is represented directly at the lowest level of the language implementation.
 
 - All primitives are **immutable**, i.e., they cannot be altered.
+- The variable assigned to a primitive type may be reassigned to a new value, but the original value can not be changed in the same way objects can be modified.
 
 `It is important not to confuse a "primitive" itself with a "variable" assigned a primitive value. The variable may be reassigned a new value, but the existing value can not be changed in the ways that objects, arrays, and functions can be altered.`
 
@@ -186,10 +189,83 @@ let b = new Boolean(false);
 - With the **object literal syntax,** a limited set of properties are initialized; then properties can be added and removed.
 - Property values can be values of any type, including other objects, which enables building complex data structures.
 - Properties are identified using key values. A key value is either a String value or a Symbol value.
-- There are two types of object properties: The data property and the accessor property.
+- There are two types of object properties: **The data property and the accessor property**.
 
+`Note: Each property has corresponding attributes. Attributes are used internally by the JavaScript engine, so you cannot directly access them. That's why attributes are listed in double square brackets, rather than single.`
+
+- Objects are able to be mutated and their properties are **passed by reference**, meaning their properties are not stored separately in memory.
+- A new variable pointing to an object **will not create a copy,** but reference the original objects location in memory. Therefore, **changing the 2nd object will also change the first.**
+
+> > **objects are passed by reference**
+
+```js
+let obj = {
+  name: "object 1",
+};
+let newObj = obj; // points to same place in memory as obj
+
+newObj.name = "newObj"; // modifies the memory
+// Since both point to the same place...
+console.log(obj); // {name: newObj}
+console.log(newObj); // {name: newObj}
+// They are both modified.
+
+let arr = [1, 2, 3];
+let newArr = arr;
+newArr.push(4);
+console.log(arr); // [1, 2, 3, 4]
+console.log(newArr); // [1, 2, 3, 4]
 ```
-Note: Each property has corresponding attributes. Attributes are used internally by the JavaScript engine, so you cannot directly access them. That's why attributes are listed in double square brackets, rather than single.
+
+- There are two ways to get around this,
+  - **Object.assign()** or
+  - use the **spread operator {...}** to "spread" or expand the object into a new variable. By doing this, it will allow the new variable to be modified without changing the original. **However, these only create a "shallow copy".**
+
+> **Shallow copy:** Shallow copy is a **bit-wise copy of an object.** A new object is created that has an exact copy of the values in the original object. **If any of the fields of the object are references to other objects, just the reference addresses are copied i.e., only the memory address is copied.**
+
+> **Deep copy:** A deep copy copies all fields, and makes copies of dynamically allocated memory pointed to by the fields. **A deep copy occurs when an object is copied along with the objects to which it refers.**
+
+![values](values.svg)
+
+```js
+const originalObj = {
+  nested: {
+    nestedKey: "nestedValue",
+  },
+  key: "value",
+};
+
+// originalObj points to location 1 in memory
+// assignObj will also point to 1 in memory
+const assignObj = originalObj;
+
+// shallowObj points to a new location 2, but references location 1 for the nested object
+const shallowObj = { ...originalObj };
+
+// deepObj clones all parts of the object to a new memory address
+const deepObj = JSON.parse(JSON.stringify(originalObj));
+
+assignObj.nested.nestedKey = "nestedValueUpdated";
+
+console.log(originalObj.nested.nestedKey); // nestedValueUpdated
+console.log(shallowObj.nested.nestedKey); // nestedValueUpdated
+console.log(deepObj.nested.nestedKey); // nestedValue
+```
+
+> Nifty Snippet: If you try to check if 2 objects with the same properties are equal with obj1 = obj2, it will return false. It does this because each object has its own address in memory as we learned about. The easiest way to check the contents of the objects for equality is this.
+
+```js
+JSON.stringify(obj1) === JSON.stringify(obj2);
+```
+
+This will return true if all the properties are the same.
+
+```js
+console.log(originalObj === assignObj); //true // bcoz same address
+console.log(originalObj === shallowObj); // false
+console.log(originalObj === deepObj); // false //even though it is deep copy..both object are same but address different
+
+JSON.stringify(obj1) === JSON.stringify(obj2);
 ```
 
 ## "Normal" objects, and functions
@@ -203,34 +279,41 @@ Note: Each property has corresponding attributes. Attributes are used internally
 
 ## Udefined vs Empty value
 
-- Undefined:
+- **Undefined:**
 
   - In JavaScript, a variable without a value, has the value undefined.
-  - The type is also undefined.
+  - **The type is also undefined**.
   - Any variable can be emptied, by setting the value to undefined. The type will also be undefined.
 
-- Empty Values: let car = "";
+- **Empty Values:**
 
-  - An empty value has nothing to do with undefined.
+```js
+let car = "";
+```
 
-  - An empty string has both a legal value and a type.
+- An empty value has nothing to do with undefined.
 
-| Type                | Result                          |
-| ------------------- | ------------------------------- |
-| Undefined undefined |
-| Null                | object\*                        |
-| Boolean boolean     |
-| Number              | number                          |
-| BigInt              | (new in ECMAScript 2020) bigint |
-| String              | string                          |
-| Symbol              | (new in ECMAScript 2015) symbol |
-| Function            | object function                 |
-| Any other object    | object                          |
+- An empty string has both a legal value and a type.
+
+### typeof
+
+| Type             | Result                          |
+| ---------------- | ------------------------------- |
+| Undefined        | undefined                       |
+| Null             | object\*                        |
+| Boolean          | boolean                         |
+| Number           | number                          |
+| BigInt           | (new in ECMAScript 2020) bigint |
+| String           | string                          |
+| Symbol           | (new in ECMAScript 2015) symbol |
+| Function         | object function                 |
+| Any other object | object                          |
 
 `*Null - Why does the typeof null return object? When JavaScript was first implemented, values were represented as a type tag and a value. The objects type tag was 0 and the NULL pointer (0x00 in most platforms) consequently had 0 as a type tag as well. A fix was proposed that would have made typeof null === 'null', but it was rejected due to legacy code that would have broken.`
 
-```
-// Numbers
+> > **Numbers typeof examples**
+
+```js
 typeof 37 === "number";
 typeof 3.14 === "number";
 typeof 42 === "number";
@@ -241,26 +324,37 @@ typeof Number("1") === "number"; // Number tries to parse things into numbers
 typeof Number("shoe") === "number"; // including values that cannot be type coerced to a number
 
 typeof 42n === "bigint";
+```
 
-// Strings
+> > **Strings typeof examples**
+
+```js
 typeof "" === "string";
 typeof "bla" === "string";
 typeof `template literal` === "string";
 typeof "1" === "string"; // note that a number within a string is still typeof string
+
+#### IMPORTANT
 typeof typeof 1 === "string"; // typeof always returns a string
 typeof String(1) === "string"; // String converts anything into a string, safer than toString
+```
 
+```js
 // Booleans
-typeof true === "boolean";
+typeof true; //  "boolean";
 typeof false === "boolean";
 typeof Boolean(1) === "boolean"; // Boolean() will convert values based on if they're truthy or falsy
 typeof !!1 === "boolean"; // two calls of the ! (logical NOT) operator are equivalent to Boolean()
+```
 
+```js
 // Symbols
 typeof Symbol() === "symbol";
 typeof Symbol("foo") === "symbol";
 typeof Symbol.iterator === "symbol";
+```
 
+```js
 // Undefined
 typeof undefined === "undefined";
 typeof declaredButUndefinedVariable === "undefined";
@@ -275,135 +369,50 @@ typeof [1, 2, 4] === "object";
 
 typeof new Date() === "object";
 typeof /regex/ === "object"; // See Regular expressions section for historical results
+```
 
+> > **typeof Wrapper Object examples**
+
+```js
 // The following are confusing, dangerous, and wasteful. Avoid them.
-typeof new Boolean(true) === "object";
-typeof new Number(1) === "object";
-typeof new String("abc") === "object";
+console.log(typeof new Boolean(true)); // object
+console.log(typeof new Number(1)); // object
+console.log(typeof new String("abc")); // object
+```
 
-// Functions
-typeof function() {} === "function";
-typeof class C {} === "function";
-typeof Math.sin === "function";
+> > **Funstions typeof examples**
+
+```js
+console.log(typeof function() {})    // function
+console.log(typeof Function() {})     // function // Constructor f
+console.log(typeof class C {})        // function
+console.log(typeof Math.sin)          // function
 ```
 
 `Undefined vs Null: Undefined is the absence of definition, it has yet to be defined, and null is the absence of value, there is no value there.`
 
-## Primitive vs Non Primitive
-
-- Primitive - Primitive values are defined by being immutable, they cannot be altered. The variable assigned to a primitive type may be reassigned to a new value, but the original value can not be changed in the same way objects can be modified. Primitives are passed by value, meaning their values are copied and then placed somewhere else in the memory. They are also compared by value. There are currently 7 primitive data types in JavaScript.
-  - string
-  - number
-  - bigint
-  - boolean
-  - null
-  - undefined
-  - symbol
-- Non Primitive - The only type that leaves us with is objects. Objects are able to be mutated and their properties are passed by reference, meaning their properties are not stored separately in memory. A new variable pointing to an object will not create a copy, but reference the original objects location in memory. Therefore, changing the 2nd object will also change the first.
-
-```
-// objects are passed by reference
-let obj = {
-  name: "object 1"
-};
-let newObj = obj; // points to same place in memory as obj
-newObj.name = "newObj"; // modifies the memory
-// Since both point to the same place...
-console.log(obj); // {name: newObj}
-console.log(newObj); // {name: newObj}
-// They are both modified.
-
-let arr = [1, 2, 3];
-let newArr = arr;
-newArr.push(4);
-console.log(arr); // [1, 2, 3, 4]
-console.log(newArr); // [1, 2, 3, 4]
-```
-
-- There are two ways to get around this, Object.assign() or use the spread operator {...} to "spread" or expand the object into a new variable. By doing this, it will allow the new variable to be modified without changing the original. However, these only create a "shallow copy".
-  > **Shallow copy:** Shallow copy is a bit-wise copy of an object. A new object is created that has an exact copy of the values in the original object. If any of the fields of the object are references to other objects, just the reference addresses are copied i.e., only the memory address is copied.
-
-> **Deep copy:** A deep copy copies all fields, and makes copies of dynamically allocated memory pointed to by the fields. A deep copy occurs when an object is copied along with the objects to which it refers.
-
-```
-const originalObj = {
-  nested: {
-    nestedKey: "nestedValue"
-  },
-  key: "value"
-};
-// originalObj points to location 1 in memory
-const assignObj = originalObj;
-// assignObj will point to 1 in memory
-const shallowObj = { ...originalObj };
-// shallowObj points to a new location 2, but references location 1 for the nested object
-const deepObj = JSON.parse(JSON.stringify(originalObj));
-// deepObj clones all parts of the object to a new memory address
-```
-
-![values](values.svg)
-
-```
-const originalObj = {
-  nested: {
-    nestedKey: "nestedValue"
-  },
-  key: "value"
-};
-const assignObj = originalObj;
-const shallowObj = { ...originalObj };
-const deepObj = JSON.parse(JSON.stringify(originalObj));
-
-console.log("originalObj: ", originalObj);
-console.log("assignObj: ", assignObj);
-console.log("shallowObj: ", shallowObj);
-console.log("deepObj: ", deepObj);
-
-/*
-originalObj: {nested: {
-                nestedKey: "changed value"
-                },
-              key: "changed value"}
-
-assignObj: {nested: {
-                nestedKey: "changed value"
-                },
-              key: "changed value"}
-
-shallowObj: {nested: {
-                nestedKey: "changed value"
-                },
-              key: "value"}
-
-deepObj: {nested: {
-                nestedKey: "nestedValue"
-                },
-              key: "value"}
-*/
-```
-
-> Nifty Snippet: If you try to check if 2 objects with the same properties are equal with obj1 = obj2, it will return false. It does this because each object has its own address in memory as we learned about. The easiest way to check the contents of the objects for equality is this.
-
-```
-JSON.stringify(obj1) === JSON.stringify(obj2);
-```
-
-- This will return true if all the properties are the same.
+---
 
 ## Static vs Dynamic Typed
 
-- The major difference between static and dynamic typed languages is when the types of variables are checked. Static typed languages (Java, C, C++, C#) are checked during the compile stage, so all types are known before run-time. Dynamic languages (JavaScript, PHP, Python, Ruby, Perl) are checked on the fly, during the execution stage. Also, after dividing the languages into dynamic and static, they are then divided again into strong and weak typed. Weakly typed (JavaScript, PHP, C, C++) languages can make type coercions implicitly while strongly typed (Python, Ruby, C#, Java) do not allow conversions between unrelated types.
+- The major difference between static and dynamic typed languages is **when the types of variables are checked**.
+- **Static typed** languages (Java, C, C++, C#) are checked during the compile stage, **so all types are known before run-time.**
+- Dynamic languages (JavaScript, PHP, Python, Ruby, Perl) are checked on the fly, during the execution stage.
+- Also, after dividing the languages into dynamic and static, they are then divided again into **strong and weak typed**.
+- Weakly typed (JavaScript, PHP, C, C++) languages can make type coercions implicitly while strongly typed (Python, Ruby, C#, Java) do not allow conversions between unrelated types.
 
 ![languages](languages.png)
+
+---
 
 ## Accessing by value and reference
 
 - JavaScript provides six primitive types as undefined, null, boolean, number, string, and symbol , and a reference type object.
-- The size of a primitive value is fixed, **therefore, JavaScript stores the primitive value on the stack.**
+- The **size** of a primitive value is fixed, **therefore, JavaScript stores the primitive value on the stack.**
 - On the other hand, the size of a reference value is dynamic so **JavaScript stores the reference value on the heap.**
 - When you assign a value to a variable, the JavaScript engine will determine whether the value is a primitive or reference value.
 - If the value is a primitive value, when you access the variable, you manipulate the actual value stored in that variable. In other words, the variable that stores a primitive value is accessed by value.
-- Unlike a primitive value, when you manipulate an object, you work on the reference of that object, rather than the actual object. It means a variable that stores an object is accessed by reference.
+- Unlike a primitive value, when you manipulate an object, you work on the reference of that object(i.e address), rather than the actual object. It means a variable that stores an object is accessed by reference.
 - To determine the type of a **primitive value** you use the **typeof operator.**
 - To find the **type of a reference value**, you use the **instanceof operator:**
 

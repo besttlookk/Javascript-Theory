@@ -15,44 +15,48 @@
 ## Object() constructor
 
 - The Object constructor creates an object wrapper for the given value.
-  - If the value is null or undefined, it will create and return an empty object.
+  - If the value is **null or undefined,** it will **create and return an empty object**.
   - Otherwise, it will return an object of a Type that corresponds to the given value.
   - If the value is an object already, it will return the value.
 - When called in a non-constructor context, Object behaves identically to new Object().
 
 #### **SYNTAX**
 
-```
-new Object()
-new Object(value)
+```js
+new Object();
+new Object(value);
 ```
 
 #### **EXAMPLES**
 
 > > **Creating a new Object**
 
-```
-let o = new Object()
-o.foo = 42
+```js
+let o = new Object();
+o.foo = 42;
 
-console.log(o)
-// Object { foo: 42 }
+console.log(o); // Object { foo: 42 }
 ```
 
 > > **Using Object given undefined and null types**
 
-- The following examples store an empty Object object in o:
+The following examples store an empty Object object in o:
+
+```js
+let o = new Object();
+console.log(new Object())   {}
 
 ```
-let o = new Object()
-```
+
+```js
+let o = new Object(undefined);
+console.log(new Object(undefined))  {}
 
 ```
-let o = new Object(undefined)
-```
 
-```
-let o = new Object(null)
+```js
+let o = new Object(null);
+console.log(new Object(null));
 ```
 
 ---
@@ -64,11 +68,11 @@ let o = new Object(null)
 
 ### 1) Data properties
 
-- A data property contains a single location for a data value.
+- A data property contains a **single location for a data value**.
 - **A data property has four attributes:**
-  1. **[[Configurarable]]** – determines whether a property can be redefined or removed via delete operator.
+  1. **[[Configurarable]]** – determines whether a property can be **redefined or removed via delete operator.**
   2. **[[Enumerable]]** – indicates that if a property will be returned in the for...in loop.
-  3. **[[Writable]]** – specifies that the value of a property can be changed.
+  3. **[[Writable]]** – specifies that the value of a **property can be changed.**
   4. **[[Value]]** – contains the actual value of a property.
 - By **default**, the **[[Configurable]] , [[Enumerable]], and [[Writable]]** attributes set to **_true_** for all properties defined directly on an object.
 - The default value of the [**[Value]] attribute is undefined.**
@@ -80,6 +84,19 @@ let person = {
   firstName: "John",
   lastName: "Doe",
 };
+```
+
+```js
+console.log(Object.getOwnPropertyDescriptor(person, "firstName"));
+```
+
+#### Output
+
+```
+{ value: 'John',
+  writable: true,
+  enumerable: true,
+  configurable: true }
 ```
 
 `To change any attribute of a property, you use the Object.defineProperty() method.`
@@ -131,30 +148,32 @@ let person = {};
 person.age = 25;
 person.ssn = "012-38-9119";
 
+// updating property: changing enumerable from default true to false
 Object.defineProperty(person, "ssn", {
   enumerable: false,
 });
 
 for (let prop in person) {
-  console.log(prop);
+  console.log(prop); // age
 }
-```
 
-#### Output
+// adding new property using Object.defineProperty: by default enumerable is false
+Object.defineProperty(person, "name", {
+  value: "user1",
+});
 
-```
-age
+console.log(person); // { age: 25 }
 ```
 
 ### 2) Accessor properties
 
 - Similar to data properties, accessor properties also have [[Configurable]] and [[Enumerable]] attributes.
 - But the accessor properties have the [[Get]] and [[Set]] attributes instead of [[Value]] and [[Writable]].
-- When you read data from an accessor property, the [[Get]] function is called automatically to return a value. The default return value of the [[Get]] function is undefined.
+- When you **read data from an accessor property**, the [[Get]] function is called automatically to return a value. The **default return value of the [[Get]] function is undefined.**
 
 - If you assign a value to an accessor property, the [[Set]] function is called automatically.
 
-- To define an accessor property, you must use the Object.defineProperty() method.
+- **To define an accessor property, you must use the Object.defineProperty() method.**
 
 ```js
 let person = {
@@ -216,7 +235,7 @@ console.log(
 
 ## JavaScript object property descriptor
 
-- The Object.getOwnPropertyDescriptor() method allows you to get the descriptor object of a property.
+- The **Object.getOwnPropertyDescriptor() method** allows you to get the **descriptor object of a property.**
 - The Object.getOwnPropertyDescriptor() method takes two arguments:
   1. An object
   2. A property of the object

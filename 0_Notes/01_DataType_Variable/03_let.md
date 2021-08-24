@@ -1,6 +1,6 @@
 # JavaScript let: Declaring Block-Scoped Variables
 
-- In ES5, when you declare a variable using the var keyword, the scope of the variable is either global or local.
+- In ES5, when you declare a variable using the **var keyword**, the scope of the variable is **either global or local**.
 - If you declare a variable outside of a function, the scope of the variable is global. When you declare a variable inside a function, the scope of the variable is local.
 - ES6 provides a new way of declaring a variable by using the let keyword. The let keyword is similar to the var keyword, except that these variables are blocked-scope
 - In JavaScript, blocks are denoted by curly braces {} , for example, the if else, for, do while, while, try catch and so on:
@@ -19,7 +19,7 @@ Because the let keyword declares a block-scoped variable, the x variable inside 
 ## JavaScript let and global object
 
 - When you declare a **global variable using the var** keyword, **you add that variable to the property list of the global object.** In the case of the web browser, the global object is the window
-- However, when you use the let keyword to declare a variable, that variable is not attached to the global object as a property.
+- However, when you use the **let keyword** to declare a variable, that variable is **not attached to the global object as a property.**
 
 ```js
 var a = 10;
@@ -73,7 +73,7 @@ for (var i = 0; i < 5; i++) {
 4
 ```
 
-`In ES6, the let keyword declares a new variable in each loop iteration. Therefore, you just need to replace the var keyword with the let keyword to fix the issue:`
+`In ES6, the let keyword declares a new variable in each loop iteration(block level scope). Therefore, you just need to replace the var keyword with the let keyword to fix the issue:`
 
 ```js
 for (let i = 0; i < 5; i++) {

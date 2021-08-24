@@ -15,24 +15,25 @@
 
 ## 1. Converting Strings to Numbers:
 
-- The global method "Number()" can convert strings to numbers.
+- The global method **"Number()"** can convert strings to numbers.
 - Strings containing numbers (like "3.14") convert to numbers (like 3.14).
-- Empty strings convert to 0.
-- Anything else converts to NaN (Not a Number).
+- **Empty strings convert to 0.**
+- Anything else converts to **NaN** (Not a Number).
 - If the number cannot be converted, NaN (Not a Number) is returned.
 
-```
-Number("3.14")    // returns 3.14
-Number(" ")       // returns 0
-Number("")        // returns 0
-Number("99 88")   // returns NaN
+```js
+Number("3.14"); // returns 3.14
+Number(" "); // returns 0
+Number(""); // returns 0
+Number("string"); // NaN
+Number("99 88"); // returns NaN
 ```
 
-- There are 3 JavaScript methods that can be used to convert variables to numbers:
+- There are **3 JavaScript methods** that can be used to convert variables to numbers:
 
   1. The Number() method
-  2. The parseInt() method
-  3. The parseFloat() method
+  2. The parseInt() method OR Number.parseInt()
+  3. The parseFloat() method OR Number.parseFloat()
 
 - "These methods are not number methods, but "global JavaScript methods."
 
@@ -46,26 +47,26 @@ Number("99 88")   // returns NaN
 | parseFloat()   | Parses its argument and returns a floating point number |
 | parseInt()     | Parses its argument and returns an integer              |
 
-```
-Number("10,33");       // returns NaN
-Number("10 33");       // returns NaN
-Number("John");        // returns NaN
+```js
+Number("10,33"); // returns NaN
+Number("10 33"); // returns NaN
+Number("John"); // returns NaN
 
-console.log(Number.parseInt('20px'))   //20
-console.log(Number.parseInt('20px', 10))   //20 (second argument is base)
-console.log(Number.parseInt('20.20px'))  // 20
-console.log(Number.parseFloat('20.20px'))  //20.2
+console.log(Number.parseInt("20px")); //20
+console.log(Number.parseInt("20px", 10)); //20 (second argument is base)
+console.log(Number.parseInt("20.20px")); // 20
+console.log(Number.parseFloat("20.20px")); //20.2
 ```
 
-```
+```js
 // now a days it is common to call this function on Number object
-parseInt("10 20 30");   // returns 10
-parseInt("10 years");   // returns 10
-parseInt("years 10");   // returns NaN
+parseInt("10 20 30"); // returns 10
+parseInt("10 years"); // returns 10
+parseInt("years 10"); // returns NaN
 
-parseFloat("10 20 30");  // returns 10
-parseFloat("10 years");  // returns 10
-parseFloat("years 10");  // returns NaN
+parseFloat("10 20 30"); // returns 10
+parseFloat("10 years"); // returns 10
+parseFloat("years 10"); // returns NaN
 ```
 
 #### **The Unary + Operator**
@@ -92,18 +93,21 @@ parseFloat("years 10");  // returns NaN
 
 - It can be used on any type of numbers, literals, variables, or expressions:
 
-```
-String(x)         // returns a string from a number variable x
-String(123)       // returns a string from a number literal 123
-String(100 + 23)  // returns a string from a number from an expression
+```js
+String(x); // returns a string from a number variable x
+String(123); // returns a string from a number literal 123
+String(100 + 23); // returns a string from a number from an expression
 ```
 
 - The Number method toString() does the same.
 
-```
-x.toString()
-(123).toString()   // "123"
-(100 + 23).toString()  // "123"
+```js
+x.toString()(123)
+  .toString()(
+    // "123"
+    100 + 23
+  )
+  .toString(); // "123"
 ```
 
 - More methods(number Methods) that can be used to convert numbers to strings:
@@ -114,7 +118,7 @@ x.toString()
 | toFixed()       | Returns a string, with a number rounded and written with a specified number of decimals. |
 | toPrecision()   | Returns a string, with a number written with a specified length                          |
 
-```
+```js
 let x = 9.656;
 x.toExponential(2); // returns 9.66e+0
 x.toExponential(4); // returns 9.6560e+0
@@ -197,7 +201,7 @@ true.toString()    // returns "true"
 
 - When JavaScript tries to operate on a "wrong" data type, it will try to convert the value to a "right" type.
 
-```
+```js
 The result is not always what you expect:
     5 + null    // returns 5         because null is converted to 0
     "5" + null  // returns "5null"   because null is converted to "null"
@@ -225,7 +229,7 @@ List of all 5 falsly value: 0, "", undefined, null, NaN
   - to boolean
   - to number
 
-```
+```js
 let num = 1;
 let str = "1";
 num == str; // true
@@ -235,6 +239,6 @@ num == str; // true
 // in this case 1 == 1 or '1' == '1' before checking equality
 ```
 
-> Strict equals: The triple equals (===) or strict equality compares two values without type coercion. If the values are not the same type, then the values are not equal. This is almost always the right way to check for equality in JavaScript, so you don't accidentaly coerce a value and end up with a bug in your program. Here is the MDN Equality Comparison page and the ECMAScript Comparison Algorithm.
+> **_Strict equals:_** The triple equals (===) or strict equality compares two values without type coercion. If the values are not the same type, then the values are not equal. This is almost always the right way to check for equality in JavaScript, so you don't accidentaly coerce a value and end up with a bug in your program. Here is the MDN Equality Comparison page and the ECMAScript Comparison Algorithm.
 
 - There are several edge cases that you will come in contact with in JavaScript as well. Check out this Comparison Table if you have questions about how types are coerced.

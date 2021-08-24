@@ -9,8 +9,8 @@
 
 #### **SYNTAX**
 
-```
-Object.seal(obj)
+```js
+Object.seal(obj);
 ```
 
 ## Comparison to Object.freeze()

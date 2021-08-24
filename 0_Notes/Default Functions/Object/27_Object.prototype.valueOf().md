@@ -5,8 +5,8 @@
 
 #### **SYNTAX**
 
-```
-valueOf()
+```js
+valueOf();
 ```
 
 ```
@@ -25,33 +25,33 @@ Note: A (unary) plus sign can sometimes be used as a shorthand for valueOf, e.g.
 
 - Suppose you have an object type MyNumberType and you want to create a valueOf method for it. The following code assigns a user-defined function to the object's valueOf method:
 
-```
-MyNumberType.prototype.valueOf = function() { return customPrimitiveValue; };
+```js
+MyNumberType.prototype.valueOf = function () {
+  return customPrimitiveValue;
+};
 ```
 
 - With the preceding code in place, any time an object of type MyNumberType is used in a context where it is to be represented as a primitive value, JavaScript automatically calls the function defined in the preceding code.
 
 - An object's valueOf method is usually invoked by JavaScript, but you can invoke it yourself as follows:
 
-```
-myNumberType.valueOf()
+```js
+myNumberType.valueOf();
 ```
 
-```
-Note: Objects in string contexts convert via the toString() method, which is different from String objects converting to string primitives using valueOf. All objects have a string conversion, if only "[object type]". But many objects do not convert to number, boolean, or function.
-```
+`Note: Objects in string contexts convert via the toString() method, which is different from String objects converting to string primitives using valueOf. All objects have a string conversion, if only "[object type]". But many objects do not convert to number, boolean, or function.`
 
 #### **EXAMPLES**
 
 > > **Using valueOf on custom types**
 
-```
+```js
 function MyNumberType(n) {
-    this.number = n;
+  this.number = n;
 }
 
-MyNumberType.prototype.valueOf = function() {
-    return this.number;
+MyNumberType.prototype.valueOf = function () {
+  return this.number;
 };
 
 var myObj = new MyNumberType(4);
@@ -60,20 +60,20 @@ myObj + 3; // 7
 
 > > **Using unary plus**
 
-```
-+"5" // 5 (string to number)
-+"" // 0 (string to number)
-+"1 + 2" // NaN (doesn't evaluate)
-+new Date() // same as (new Date()).getTime()
-+"foo" // NaN (string to number)
-+{} // NaN
-+[] // 0 (toString() returns an empty string list)
-+[1] // 1
-+[1,2] // NaN
-+new Set([1]) // NaN
-+BigInt(1) // Uncaught TypeError: Cannot convert a BigInt value to a number
-+undefined // NaN
-+null // 0
-+true // 1
-+false // 0
+```js
++"5" + // 5 (string to number)
+  "" + // 0 (string to number)
+  "1 + 2" + // NaN (doesn't evaluate)
+  new Date() + // same as (new Date()).getTime()
+  "foo" + // NaN (string to number)
+  {} + // NaN
+  [] + // 0 (toString() returns an empty string list)
+  [1] + // 1
+  [1, 2] + // NaN
+  new Set([1]) + // NaN
+  BigInt(1) + // Uncaught TypeError: Cannot convert a BigInt value to a number
+  undefined + // NaN
+  null + // 0
+  true + // 1
+  false; // 0
 ```

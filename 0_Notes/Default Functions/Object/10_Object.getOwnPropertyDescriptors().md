@@ -1,13 +1,15 @@
 # Object.getOwnPropertyDescriptors()
 
-- The Object.getOwnPropertyDescriptors() method returns all own property descriptors of a given object.
-- This method permits examination of the precise description of all own properties of an object.
-- . A property in JavaScript consists of either a string-valued name or a Symbol and a property descriptor.
+The Object.getOwnPropertyDescriptors() method returns **_all_** own property descriptors of a given object.
+
+This method permits examination of the precise description of all own properties of an object.
+
+A property in JavaScript consists of either a string-valued name or a Symbol and a property descriptor.
 
 #### **SYNTAX**
 
-```
-Object.getOwnPropertyDescriptors(obj)
+```js
+Object.getOwnPropertyDescriptors(obj);
 ```
 
 #### **EXAMPLE**
@@ -27,16 +29,13 @@ Object.create(
 
 - A typical way of creating a subclass is to define the subclass, set its prototype to an instance of the superclass, and then define properties on that instance. This can get awkward especially for getters and setters. Instead, you can use this code to set the prototype:
 
-```
+```js
 function superclass() {}
 superclass.prototype = {
   // Define the superclass constructor, methods, and properties here
 };
 function subclass() {}
-subclass.prototype = Object.create(
-  superclass.prototype,
-  {
-    // Define the subclass constructor, methods, and properties here
-  }
-)
+subclass.prototype = Object.create(superclass.prototype, {
+  // Define the subclass constructor, methods, and properties here
+});
 ```

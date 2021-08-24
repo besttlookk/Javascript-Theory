@@ -19,32 +19,22 @@
   - Functions are always objects
   - Objects are always objects
 
+```js
+console.log(typeof new Boolean(true)); // object
+console.log(typeof new Number(3)); // object
+console.log(typeof new String("hello")); // object
+console.log(typeof new Date()); // object
+console.log(typeof Math); // object
+console.log(typeof []); // object
+```
+
 - All JavaScript values, except primitives, are objects.
-
-## Creating a JavaScript Object:
-
-- There are 3 ways to create new objects:
-  1.  using an object literal.
-  2.  By creating instance of Object directly (using new keyword)
-  3.  By using an object constructor (using new keyword)
 
 ---
 
-## METHOD 1: Creating object by object literal
+## Accessing properties
 
-#### **SYNTAX**
-
-```
-  object={property1:value1,property2:value2.....propertyN:valueN}
-```
-
-- An object like this is referred to as an object literal — we've literally written out the object contents as we've come to create it.
-- It is very common to create an object using an object literal when you want to transfer a series of structured, related data items in some manner. for example sending a request to the server to be put into a database
-- Sending a single object is much more efficient than sending several items individually, and it is easier to work with than an array, when you want to identify individual items by name.
-
-`The object literal syntax is convenient for creating a single object. `
-
-#### **EXAMPLE**
+`To access a property of an object, you use one of two notations: the dot notation and array-like notation.`
 
 ```js
 const person = {
@@ -71,8 +61,6 @@ const person = {
   },
 };
 ```
-
-`To access a property of an object, you use one of two notations: the dot notation and array-like notation.`
 
 ### **Dot notation**
 
@@ -117,10 +105,10 @@ person["age"];
 person["name"]["first"];
 ```
 
-- This looks very similar to how you access the items in an array, and it is basically the same thing — instead of using an index number to select an item, you are using the name associated with each member's value.
-- It is no wonder that objects are sometimes called associative arrays — they map strings to values in the same way that arrays map numbers to values.
+- This looks very similar to how you access the items in an array, and it is basically the same thing — **instead of using an index number to select an item, you are using the name associated with each member's value.**
+- It is no wonder that objects are sometimes called **associative arrays** — they **map strings to values** in the same way that **arrays map numbers to values.**
 
-### **Setting object members / Adding a new property to an object**
+### Setting(updating) object members / Adding a new property to an object
 
 - Unlike objects in other programming languages such as Java and C++, you can add a property to an object after object creation.
 - you can also set (update) the value of object members by declaring the member you want to set (using dot or bracket notation), like this:
@@ -139,7 +127,10 @@ person.farewell = function () {
 };
 ```
 
-- One useful aspect of bracket notation is that it can be used to set not only member values dynamically, but member names too.
+`One useful aspect of bracket notation is that it can be used to set not only member values dynamically, but member names too.`
+
+## Computed property name
+
 - Let's say we wanted users to be able to store custom value types in their people data, by typing the member name and value into two text inputs. We could get those values like this:
 
 ```js
@@ -151,6 +142,34 @@ let myDataValue = nameValue.value;
 
 ```js
 person[myDataName] = myDataValue;
+```
+
+- Prior to ES6, you could use the square brackets( []) to enable the computed property names for the properties on objects.
+- The square brackets allow you to use the string literals and variables as the property names.
+
+```js
+let name = "machine name";
+let machine = {
+  [name]: "server",
+  "machine hours": 10000,
+};
+
+console.log(machine[name]); // server
+console.log(machine["machine hours"]); // 10000
+```
+
+- In ES6, the computed property name is a part of the object literal syntax, and it uses the square bracket notation.
+- When a property name is placed inside the square brackets, the JavaScript engine evaluates it as a string. It means that you can use an expression as a property name. For example:
+
+```js
+let prefix = "machine";
+let machine = {
+  [prefix + " name"]: "server",
+  [prefix + " hours"]: 10000,
+};
+
+console.log(machine["machine name"]); // server
+console.log(machine["machine hours"]); // 10000
 ```
 
 - Adding a property to an object using the method above isn't possible with dot notation, which can only accept a literal member name, not a variable value pointing to a name.
@@ -281,6 +300,28 @@ let person = {
 person.greet();
 ```
 
+- This shorthand syntax is also known as the concise method syntax. It’s valid to have spaces in the property name. For example:
+
+```js
+let server = {
+  name: "Server",
+  restart() {
+    console.log("The " + this.name + " is restarting...");
+  },
+  "starting up"() {
+    console.log("The " + this.name + " is starting up!");
+  },
+};
+
+server["starting up"]();
+```
+
+- To call the method, you use the following syntax:
+
+```js
+object_name["property name"]();
+```
+
 ## The _this_ value
 
 - Inside the method, the this value references the object used to invoke the method. Therefore, you can access an object property using the this value as follows
@@ -294,30 +335,3 @@ this.propertyName;
 - when we start creating constructors and so on, this is very useful — it always ensures that the correct values are used when a member's context changes (for example, two different person object instances may have different names, but we want to use their own name when saying their greeting).
 
 ---
-
-## METHOD 2: Creating object using Object() Constructor
-
-- First of all, you can use the Object() constructor to create a new object.
-- Yes, even generic objects have a constructor, which generates an empty object.
-
-```js
-let person1 = new Object();
-
-person1.name = "Chris";
-person1["age"] = 38;
-person1.greeting = function () {
-  alert("Hi! I'm " + this.name + ".");
-};
-```
-
-- You can also pass an object literal to the Object() constructor as a parameter, to prefill it with properties/methods.
-
-```js
-let person1 = new Object({
-  name: "Chris",
-  age: 38,
-  greeting: function () {
-    alert("Hi! I'm " + this.name + ".");
-  },
-});
-```

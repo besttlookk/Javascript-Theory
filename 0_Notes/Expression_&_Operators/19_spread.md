@@ -5,7 +5,7 @@
 - It is commonly used when you want to add a new item to a local data store, or display all stored items plus a new addition.
 - When using spread syntax for function calls, be aware of the possibility of exceeding the JavaScript engine's argument length limit.
 
-```
+```js
 let numberStore = [0, 1, 2];
 let newNumber = 12;
 numberStore = [...numberStore, newNumber];
@@ -15,19 +15,19 @@ numberStore = [...numberStore, newNumber];
 
 - For function calls:
 
-```
+```js
 myFunction(...iterableObj); // pass all elements of iterableObj as arguments to function myFunction
 ```
 
 - For array literals or strings:
 
-```
-[...iterableObj, '4', 'five', 6]; // combine two arrays by inserting all elements from iterableObj
+```js
+[...iterableObj, "4", "five", 6]; // combine two arrays by inserting all elements from iterableObj
 ```
 
 - For object literals (new in ECMAScript 2018):
 
-```
+```js
 let objClone = { ...obj }; // pass all key:value pairs from an object
 ```
 
@@ -91,7 +91,7 @@ let lyrics = ['head', ...parts, 'and', 'toes'];
 
 ### copy an array
 
-```
+```js
 let arr = [1, 2, 3];
 let arr2 = [...arr]; // like arr.slice()
 
@@ -100,7 +100,7 @@ arr2.push(4);
 //  arr remains unaffected
 ```
 
-```
+```js
 Note: Spread syntax effectively goes one level deep while copying an array. Therefore, it may be unsuitable for copying multidimensional arrays, as the following example shows. (The same is true with Object.assign() and spread syntax.)
 
 let a = [[1], [2], [3]];
@@ -173,9 +173,9 @@ Note: Unlike unshift(), this creates a new arr1, and does not modify the origina
 
 - Shallow-cloning (excluding prototype) or merging of objects is now possible using a shorter syntax than Object.assign().
 
-```
-let obj1 = { foo: 'bar', x: 42 };
-let obj2 = { foo: 'baz', y: 13 };
+```js
+let obj1 = { foo: "bar", x: 42 };
+let obj2 = { foo: "baz", y: 13 };
 
 let clonedObj = { ...obj1 };
 // Object { foo: "bar", x: 42 }
@@ -188,7 +188,7 @@ let mergedObj = { ...obj1, ...obj2 };
 
 - Note that you cannot replace or mimic the Object.assign() function:
 
-```
+```js
 let obj1 = { foo: 'bar', x: 42 };
 let obj2 = { foo: 'baz', y: 13 };
 const merge = ( ...objects ) => ( { ...objects } );
@@ -212,4 +212,126 @@ In the above example, the spread syntax does not work as one might expect: it sp
 ```
 let obj = {'key1': 'value1'};
 let array = [...obj]; // TypeError: obj is not iterable
+```
+
+## JavaScript Object spread operator use cases
+
+> > **1) clone an object**
+
+- You can use the spread operator to clone the own enumerable properties of an object:
+
+`Note that the cloning is always shallow.`
+
+```js
+const circle = {
+  radius: 10,
+};
+
+const clonedCircle = { ...circle };
+
+console.log(clonedCircle); // { radius: 10 }
+```
+
+> > **2) Merging objects**
+
+```js
+const circle = {
+  radius: 10,
+};
+
+const style = {
+  backgroundColor: "red",
+};
+
+const solidCircle = {
+  ...circle,
+  ...style,
+};
+
+console.log(solidCircle);
+```
+
+---
+
+## Spread operator vs. Object.assign()
+
+- The spread operator (...) defines new properties in the target object while the Object.assign() method assigns them. It has two side effects.
+
+### 1) Target objects with setters
+
+- The Object.assign() invokes setters on the target object while the spread operator doesn’t.
+
+> > The following illustrates how to clone an object using both Object.assign() and spread operator (...). However, only the Object.assign() method triggers the setters:
+
+```js
+class Circle {
+  constructor(radius) {
+    this.radius = radius;
+  }
+  set diameter(value) {
+    this.radius = value / 2;
+    console.log("SET ", value);
+  }
+  get diameter() {
+    return this.radius * 2;
+  }
+}
+
+let circle = new Circle(100);
+
+let cloneCircle1 = Object.assign(circle, {
+  diameter: 200,
+});
+
+let cloneCircle2 = {
+  ...circle,
+};
+```
+
+### 2) Target objects with read-only properties
+
+- If a target object has a read-only property, you cannot use Object.assign() method to assign a new value to that property. However, the spread operator ( ...) can define a new property.
+- Suppose you have an object called blueSquare whose the color property is readonly:
+
+```js
+const blueSquare = {
+  length: 100,
+  color: "blue",
+};
+
+Object.defineProperty(blueSquare, "color", {
+  value: "blue",
+  enumerable: true,
+  writable: false,
+});
+
+console.log(blueSquare); // { length: 100, color: 'blue' }
+```
+
+The following uses the spread operator (...) to merge the style and blueSquare objects:
+
+```js
+// merge style and blueSquare objects:
+const style = {
+  color: "green",
+};
+
+const greenSquare = {
+  ...blueSquare,
+  ...style,
+};
+
+console.log(greenSquare); // { length: 100, color: 'green' }
+```
+
+However, if you use the Object.assign() method, you will get an error:
+
+```js
+// merge style and redSquare objects: ERROR
+const redSquare = Object.assign(blueSquare, {
+  color: "red",
+});
+
+TypeError: Cannot assign to read only property 'color' of object '#<Object>'
+
 ```

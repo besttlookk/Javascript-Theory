@@ -1,9 +1,9 @@
 # JavaScript Constructor Prototype
 
-- The combination of the constructor and prototype patterns is the most common way to define custom types in ES5.
-- The constructor pattern defines object properties while the prototype pattern defines methods and shared properties of the objects.
+- The **combination of the constructor and prototype patterns** is the most common way to define custom types in **ES5.**
+- The **constructor pattern defines object properties** while the **prototype pattern defines methods** and shared properties of the objects.
 - By using this pattern, all objects of a custom type share the methods defined in the prototype. And each object has its own properties.
-- This constructor/prototype takes the best parts of both constructor and prototype patterns.
+- This **constructor/prototype** takes the best parts of both constructor and prototype patterns.
 
 ## JavaScript Constructor / Prototype example
 
@@ -55,9 +55,9 @@ console.log(p2.getFullName());
 
 ## Classes in ES6
 
-- ES6 introduces the class keyword that makes the constructor/prototype pattern easier to use
+- ES6 introduces the class keyword that makes the constructor/prototype pattern **easier to use**
 
-> > The following uses the class keyword to define exactly same Person type:
+> > The following uses the **_class keyword_** to define exactly same Person type:
 
 ```js
 class Person {

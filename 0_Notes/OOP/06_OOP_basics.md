@@ -59,7 +59,7 @@ Note: The fancy word for the ability of multiple object types to implement the s
 
 - Object Oriented Programming, or OOP, is the idea that all code should be grouped into "boxes" (objects) to make your program easier to read and understand. Keeping the data encapsulated helps to keep the program organized. Each object has a state that defines what it does and methods (functions on an object) that can use or modify the state. Considering almost everything in JavaScript is an object, you would think this would be easy to do. Say we want to create a game that has lots of characters that all have different abilities. How would we go about this?
 
-```
+```js
 const elf1 = {
   name: 'Dobby',
   type: 'house',
@@ -94,7 +94,7 @@ elf2.attack()
 
 - As you can see, this code is already getting very repetitive and is not maintainable with only 1 character type. Imagine adding more characters, things would get out of control quickly. So, another way to create objects was introduced, factory functions. Factory functions return a new object every time they are ran. This could improve the code somewhat.
 
-```
+```js
 function createElf(name, type, weapon) {
   return {
     name: name,
@@ -105,7 +105,7 @@ function createElf(name, type, weapon) {
     },
     attack() {
       return `${name} attacks with ${weapon}`;
-    }
+    },
   };
 }
 
@@ -122,21 +122,21 @@ legolas.attack(); // Legolas attacks with bow.
 
 - This is a step in the right direction, but if we added more characters, we would run into some of the same issues again. Not only is the code not DRY, the attack method is being created and taking up memory space for every new elf. This is not very efficient. How do we solve this? Well, we could separate the methods out into a store.
 
-```
+```js
 const elfMethodsStore = {
   attack() {
     return `attack with ${this.weapon}`;
   },
   say() {
     return `Hi, my name is ${this.name}, I am a ${this.type} elf.`;
-  }
+  },
 };
 
 function createElf(name, type, weapon) {
   return {
     name: name, // old way
     type, // with ES6 assignment, if they are the same name
-    weapon
+    weapon,
   };
 }
 
@@ -155,14 +155,14 @@ legolas.say = elfMethodsStore.say;
 
 - Having a store saved us some efficiency in memory, but this was a lot of manual work to assign each method. So, we were given Object.create to help create this chain without having to assign each method.
 
-```
+```js
 const elfMethodsStore = {
   attack() {
     return `attack with ${this.weapon}`;
   },
   say() {
     return `Hi, my name is ${this.name}, I am a ${this.type} elf.`;
-  }
+  },
 };
 
 function createElf(name, type, weapon) {
@@ -187,7 +187,7 @@ legolas.attack; // attack with bow
 
 - Using Object.create is true prototypal inheritance, the code is cleaner and easier to read. However, you will not see this being used in most programs. Before Object.create came around, we had the ability to use constructor functions. Constructor functions are exactly like the function constructor we talked about above. The number and string functions were constructed and invoked with the new keyword and they were capitalized. The new keyword actually changes the meaning of this for the constructor function. Without new, this will point to the window object instead of the object that we just created. It is best practice to capitalize constructor functions to help us identify them and know to use the new keyword. Properties added to a constructor function can only be done using the this keyword, regular variables do not get added to the object.
 
-```
+```js
 // constructor functions are typically capitalized
 function Elf(name, type, weapon) {
   // not returning anything
@@ -203,7 +203,7 @@ const dobby = new Elf("Dobby", "house", "cloth");
 const legolas = new Elf("Legolas", "high", "bow");
 
 // To add methods we need to add
-Elf.prototype.attack = function() {
+Elf.prototype.attack = function () {
   // cannot be an arrow function
   // this would be scoped to the window obj
   return `attack with ${this.weapon}`;
@@ -216,7 +216,7 @@ legolas.attack(); // attack with bow
 
 > Nifty Snippet: A constructor function in JavaScript is actually just a constructor itself.
 
-```
+```js
 // What happens under the hood...
 const Elf = new Function(
   'name',
@@ -237,7 +237,7 @@ const dobby = new Elf('Dobby', 'house', 'cloth')
 
 - Confused yet? Prototype is a little weird and hard to read unless you really understand your prototypal inheritance. No one really liked using the prototype way of adding methods, so ES6 JavaScript gave us the class keyword. However, classes in JavaScript are not true classes, they are syntactic sugar. Under the hood, it is still using the old prototype method. They are in fact just "special functions" with one big difference; functions are hoisted and classes are not. You need to declare your class before it can be used in your codebase. Classes also come with a new method, the constructor that creates and instantiates an object created with class. Classes are able to be extended upon using the extends keyword, allowing subclasses to be created. If there is a constructor present in the extended class, the super keyword is needed to link the constructor to the base class. You can check if something is inherited from a class by using the keyword instanceof to compare the new object to the class.
 
-```
+```js
 class Character {
   constructor(name, weapon) {
     this.name = name;
@@ -281,7 +281,7 @@ gruul instanceof Ogre; //true
 
 - Most class based languages have the ability to create either public or private fields within a class. Adding these to classes in JavaScript is still an experimental feature in development. Support in browsers is limited, but can be implemented with systems like Babel. Public declarations are set above the constructor and can be used within the class, but do not get added to a new instance. The private declarations are set with the # sign in front of the variable and are only accessible within that class, they cannot be accessed or changed from outside.
 
-```
+```js
 // public declarations
 class Rectangle {
   height = 0;

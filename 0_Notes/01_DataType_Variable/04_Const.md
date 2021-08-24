@@ -8,8 +8,8 @@ const CONSTANT_NAME = value;
 
 `By convention, the constant identifiers are in uppercase.`
 
-- Like the let keyword, the const keyword declares blocked-scope variables. However, the block-scoped variables declared by the const keyword can’t be reassigned.
-- The variables declared by the let keyword are mutable. It means that you can change their values anytime you want. However, variables created by the const keyword are “immutable”. In other words, you can’t reassign them to different values.
+- Like the _let_ keyword, the _const keyword declares blocked-scope variables_. However, the block-scoped variables declared by the const keyword **can’t be reassigned.**
+- The variables declared by the **let keyword are mutable**. It means that you can change their values anytime you want. However, variables created by the **const keyword are “immutable”.** In other words, you can’t reassign them to different values.
 - If you attempt to reassign a variable declared by the const keyword, you’ll get a TypeError
 
 ```js
@@ -92,7 +92,7 @@ for (const score of scores) {
 ```
 
 - In this example, the for...of creates a new binding for the const keyword in each loop iteration. In other words, a new score constant is created in each iteration.
-- Notice that the const will not work in an imperative for loop. Trying to use the const keyword to declare a variable in the imperative for loop will result in a TypeError:
+- Notice that the **const will not work in an imperative for loop.** Trying to use the const keyword to declare a variable in the imperative for loop will result in a TypeError:
 
 ```js
 for (const i = 0; i < scores.length; i++) {

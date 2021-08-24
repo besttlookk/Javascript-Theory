@@ -5,8 +5,8 @@
 
 #### **SYNTAX**
 
-```
-Object.defineProperty(obj, prop, descriptor)
+```js
+Object.defineProperty(obj, prop, descriptor);
 ```
 
 #### **PARAMETERS**
@@ -22,20 +22,25 @@ Object.defineProperty(obj, prop, descriptor)
 - **descriptor**
   - The descriptor for the property being defined or modified.
 
----
+`Normal property addition through assignment creates properties which show up during property enumeration (for...in loop or Object.keys method), whose values may be changed, and which may be deleted.**(i.e default falue for [[enumeration]], [[configurable]], and [[writtable]] is true)**`
 
-- Normal property addition through assignment creates properties which show up during property enumeration (for...in loop or Object.keys method), whose values may be changed, and which may be deleted.
-- This method allows these extra details to be changed from their defaults. By default, values added using Object.defineProperty() are **_immutable and not enumerable._**
-- Property descriptors present in objects come in two main flavors: **data descriptors** and **accessor descriptors.**
+This method allows these extra details to be changed from their defaults. By default, values added using Object.defineProperty() are **_immutable and not enumerable._**
+
+Property descriptors present in objects come in two main flavors: **data descriptors** and **accessor descriptors.**
+
 - A **data descriptor** is a property that has a value, which may or may not be writable.
-- An **accessor descriptor** is a property described by a getter-setter pair of functions. A descriptor must be one of these two flavors; it cannot be both.
-- Both data and accessor descriptors are objects. They share the following optional keys (please note: the defaults mentioned here are in the case of defining properties using Object.defineProperty()):
-  - **configurable:**
-    - **true** - if the type of this property descriptor may be changed and if the property may be deleted from the corresponding object.
-    - **Defaults to false.**
-  - **enumerable:**
-    - **true** - if and only if this property shows up during enumeration of the properties on the corresponding object.
-    - Defaults to false.
+- An **accessor descriptor** is a property described by a **getter-setter pair of functions**.
+
+A descriptor must be one of these two flavors; **it cannot be both.**
+
+**Both data and accessor descriptors are objects**. They share the following optional keys (please note: the defaults mentioned here are in the case of defining properties using Object.defineProperty()):
+
+- **configurable:**
+  - **true** - if the type of this property descriptor may be changed and if the property may be deleted from the corresponding object.
+  - **Defaults to false.**
+- **enumerable:**
+  - **true** - if and only if this property shows up during enumeration of the properties on the corresponding object.
+  - Defaults to false.
 - A **data descriptor** also has the following optional keys:
 
   - **value**
@@ -45,7 +50,7 @@ Object.defineProperty(obj, prop, descriptor)
     - Defaults to undefined.
 
   - **writable**
-    - **true** - if the value associated with the property may be changed with an assignment operator.
+    - **true** - if the value associated with the property may be **changed with an assignment operator**.
     - **Defaults to false.**
 
 - An **accessor descriptor** also has the following optional keys:
@@ -53,46 +58,50 @@ Object.defineProperty(obj, prop, descriptor)
   - **get**
 
     - A function which serves as a getter for the property, or undefined if there is no getter.
-    - When the property is accessed, this function is called without arguments and with this set to the object through which the property is accessed (this may not be the object on which the property is defined due to inheritance).
-    - The return value will be used as the value of the property.
-    - Defaults to undefined.
+    - When the property is accessed, this function is **called without arguments** and with this set to the object through which the property is accessed (this may not be the object on which the property is defined due to inheritance).
+    - The **return value will be used as the value of the property.**
+    - **Defaults to undefined.**
 
   - **set**
     - A function which serves as a setter for the property, or undefined if there is no setter.
     - When the property is assigned, this function is called with one argument (the value being assigned to the property) and with this set to the object through which the property is assigned.
-    - Defaults to undefined.
+    - **Defaults to undefined.**
 
-- If a descriptor has neither of value, writable, get and set keys, it is treated as a data descriptor. If a descriptor has both [value or writable] and [get or set] keys, an exception is thrown.
-- Bear in mind that these attributes are not necessarily the descriptor's own properties. Inherited properties will be considered as well.
-  -In order to ensure these defaults are preserved, you might freeze the Object upfront, specify all options explicitly, or point to null with Object.create(null).
+If a descriptor has **neither of value, writable, get and set keys, it is treated as a data descriptor.**
 
-```
+If a descriptor has **both [value or writable] and [get or set] keys, an exception is thrown.**
+
+`Bear in mind that these attributes are not necessarily the descriptor's own properties. Inherited properties will be considered as well.`
+
+In order to ensure these defaults are preserved, you might freeze the Object upfront, specify all options explicitly, or point to null with Object.create(null).
+
+```js
 // using __proto__
 var obj = {};
 var descriptor = Object.create(null); // no inherited properties
-descriptor.value = 'static';
+descriptor.value = "static";
 
 // not enumerable, not configurable, not writable as defaults
-Object.defineProperty(obj, 'key', descriptor);
+Object.defineProperty(obj, "key", descriptor);
 
 // being explicit
-Object.defineProperty(obj, 'key', {
+Object.defineProperty(obj, "key", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: 'static'
+  value: "static",
 });
 
 // recycling same object
 function withValue(value) {
-  var d = withValue.d || (
-    withValue.d = {
+  var d =
+    withValue.d ||
+    (withValue.d = {
       enumerable: false,
       writable: false,
       configurable: false,
-      value: value
-    }
-  );
+      value: value,
+    });
 
   // avoiding duplicate operation for assigning value
   if (d.value !== value) d.value = value;
@@ -100,7 +109,7 @@ function withValue(value) {
   return d;
 }
 // ... and ...
-Object.defineProperty(obj, 'key', withValue('static'));
+Object.defineProperty(obj, "key", withValue("static"));
 
 // if freeze is available, prevents adding or
 // removing the object prototype properties
@@ -115,31 +124,35 @@ Object.defineProperty(obj, 'key', withValue('static'));
 - When the property specified doesn't exist in the object, Object.defineProperty() creates a new property as described.
 - Fields may be omitted from the descriptor, and default values for those fields are inputted.
 
-```
+```js
 var o = {}; // Creates a new object
 
 // Example of an object property added
 // with defineProperty with a data property descriptor
-Object.defineProperty(o, 'a', {
+Object.defineProperty(o, "a", {
   value: 37,
   writable: true,
   enumerable: true,
-  configurable: true
+  configurable: true,
 });
 // 'a' property exists in the o object and its value is 37
 
 // Example of an object property added
 // with defineProperty with an accessor property descriptor
 var bValue = 38;
-Object.defineProperty(o, 'b', {
+Object.defineProperty(o, "b", {
   // Using shorthand method names (ES2015 feature).
   // This is equivalent to:
   // get: function() { return bValue; },
   // set: function(newValue) { bValue = newValue; },
-  get() { return bValue; },
-  set(newValue) { bValue = newValue; },
+  get() {
+    return bValue;
+  },
+  set(newValue) {
+    bValue = newValue;
+  },
   enumerable: true,
-  configurable: true
+  configurable: true,
 });
 o.b; // 38
 // 'b' property exists in the o object and its value is 38
@@ -147,9 +160,11 @@ o.b; // 38
 // unless o.b is redefined
 
 // You cannot try to mix both:
-Object.defineProperty(o, 'conflict', {
+Object.defineProperty(o, "conflict", {
   value: 0x9f91102,
-  get() { return 0xdeadbeef; }
+  get() {
+    return 0xdeadbeef;
+  },
 });
 // throws a TypeError: value appears
 // only in data descriptors,
@@ -158,9 +173,9 @@ Object.defineProperty(o, 'conflict', {
 
 > > **Modifying a property**
 
-- When the property already exists, Object.defineProperty() attempts to modify the property according to the values in the descriptor and the object's current configuration.
-- If the old descriptor had its configurable attribute set to false the property is said to be “non-configurable”. It is not possible to change any attribute of a non-configurable accessor property.
-- For data properties which are configurable, it is possible to modify the value if the property is writable, and it is possible to change the writable attribute from true to false.
+- When the **property already exists**, Object.defineProperty() attempts to modify the property according to the values in the descriptor and the object's current configuration.
+- If the old descriptor had its **configurable attribute set to false** the property is said to be “non-configurable”. It is **not possible to change any attribute** of a non-configurable accessor property.
+- For **data properties which are configurable,** it is **possible to modify the value if the property is writable,** and it is possible to change the writable attribute from true to false.
 - It is not possible to switch between data and accessor property types when the property is non-configurable
 - A TypeError is thrown when attempts are made to change non-configurable property attributes (except value and writable, if permitted) unless the current and new values are the same.
 
@@ -168,62 +183,62 @@ Object.defineProperty(o, 'conflict', {
 
 - When the writable property attribute is set to false, the property is said to be “non-writable”. It cannot be reassigned.
 
-```
+```js
 var o = {}; // Creates a new object
 
-Object.defineProperty(o, 'a', {
+Object.defineProperty(o, "a", {
   value: 37,
-  writable: false
+  writable: false,
 });
 
 console.log(o.a); // logs 37
-o.a = 25; // No error thrown
+o.a = 25; // No error thrown(non-writtable)
 // (it would throw in strict mode,
 // even if the value had been the same)
 console.log(o.a); // logs 37. The assignment didn't work.
 
 // strict mode
-(function() {
-  'use strict';
+(function () {
+  "use strict";
   var o = {};
-  Object.defineProperty(o, 'b', {
+  Object.defineProperty(o, "b", {
     value: 2,
-    writable: false
+    writable: false,
   });
   o.b = 3; // throws TypeError: "b" is read-only
   return o.b; // returns 2 without the line above
-}());
+})();
 ```
 
-- As seen in the example, trying to write into the non-writable property doesn't change it but doesn't throw an error either.
+As seen in the example, trying to write into the non-writable property doesn't change it but doesn't throw an error either.
 
 #### **Enumerable attribute**
 
-- The enumerable property attribute defines whether the property is picked by Object.assign() or spread operator.
+- The enumerable property attribute defines whether the property is **picked by Object.assign() or spread operator.**
 - For non-Global_Objects/Symbol properties it also defines whether it shows up in a for...in loop and Object.keys() or not.
 
-```
+```js
 var o = {};
-Object.defineProperty(o, 'a', {
+Object.defineProperty(o, "a", {
   value: 1,
-  enumerable: true
+  enumerable: true,
 });
-Object.defineProperty(o, 'b', {
+Object.defineProperty(o, "b", {
   value: 2,
-  enumerable: false
+  enumerable: false,
 });
-Object.defineProperty(o, 'c', {
-  value: 3
+Object.defineProperty(o, "c", {
+  value: 3,
 }); // enumerable defaults to false
 o.d = 4; // enumerable defaults to true
-         // when creating a property by setting it
-Object.defineProperty(o, Symbol.for('e'), {
+// when creating a property by setting it
+Object.defineProperty(o, Symbol.for("e"), {
   value: 5,
-  enumerable: true
+  enumerable: true,
 });
-Object.defineProperty(o, Symbol.for('f'), {
+Object.defineProperty(o, Symbol.for("f"), {
   value: 6,
-  enumerable: false
+  enumerable: false,
 });
 
 for (var i in o) {
@@ -233,48 +248,52 @@ for (var i in o) {
 
 Object.keys(o); // ['a', 'd']
 
-o.propertyIsEnumerable('a'); // true
-o.propertyIsEnumerable('b'); // false
-o.propertyIsEnumerable('c'); // false
-o.propertyIsEnumerable('d'); // true
-o.propertyIsEnumerable(Symbol.for('e')); // true
-o.propertyIsEnumerable(Symbol.for('f')); // false
+o.propertyIsEnumerable("a"); // true
+o.propertyIsEnumerable("b"); // false
+o.propertyIsEnumerable("c"); // false
+o.propertyIsEnumerable("d"); // true
+o.propertyIsEnumerable(Symbol.for("e")); // true
+o.propertyIsEnumerable(Symbol.for("f")); // false
 
-var p = { ...o }
-p.a // 1
-p.b // undefined
-p.c // undefined
-p.d // 4
-p[Symbol.for('e')] // 5
-p[Symbol.for('f')] // undefined
+var p = { ...o };
+p.a; // 1
+p.b; // undefined
+p.c; // undefined
+p.d; // 4
+p[Symbol.for("e")]; // 5
+p[Symbol.for("f")]; // undefined
 ```
 
 #### **Configurable attribute**
 
 - The configurable attribute controls at the same time whether the property can be deleted from the object and whether its attributes (other than value and writable) can be changed.
 
-```
+```js
 var o = {};
-Object.defineProperty(o, 'a', {
-  get() { return 1; },
-  configurable: false
+Object.defineProperty(o, "a", {
+  get() {
+    return 1;
+  },
+  configurable: false,
 });
 
-Object.defineProperty(o, 'a', {
-  configurable: true
+Object.defineProperty(o, "a", {
+  configurable: true,
 }); // throws a TypeError
-Object.defineProperty(o, 'a', {
-  enumerable: true
+Object.defineProperty(o, "a", {
+  enumerable: true,
 }); // throws a TypeError
-Object.defineProperty(o, 'a', {
-  set() {}
+Object.defineProperty(o, "a", {
+  set() {},
 }); // throws a TypeError (set was undefined previously)
-Object.defineProperty(o, 'a', {
-  get() { return 1; }
+Object.defineProperty(o, "a", {
+  get() {
+    return 1;
+  },
 }); // throws a TypeError
 // (even though the new get does exactly the same thing)
-Object.defineProperty(o, 'a', {
-  value: 12
+Object.defineProperty(o, "a", {
+  value: 12,
 }); // throws a TypeError // ('value' can be changed when 'configurable' is false but not in this case due to 'get' accessor)
 
 console.log(o.a); // logs 1
@@ -282,33 +301,33 @@ delete o.a; // Nothing happens
 console.log(o.a); // logs 1
 ```
 
-- If the configurable attribute of o.a had been true, none of the errors would be thrown and the property would be deleted at the end.
+If the configurable attribute of o.a had been true, none of the errors would be thrown and the property would be deleted at the end.
 
 > > **Adding properties and default values**
 
 - It is important to consider the way default values of attributes are applied.
-- There is often a difference between using dot notation to assign a value and using Object.defineProperty(), as shown in the example below.
+- **There is often a difference between using dot notation to assign a value and using Object.defineProperty()**, as shown in the example below.
 
-```
+```js
 var o = {};
 
 o.a = 1;
 // is equivalent to:
-Object.defineProperty(o, 'a', {
+Object.defineProperty(o, "a", {
   value: 1,
   writable: true,
   configurable: true,
-  enumerable: true
+  enumerable: true,
 });
 
 // On the other hand,
-Object.defineProperty(o, 'a', { value: 1 });
+Object.defineProperty(o, "a", { value: 1 });
 // is equivalent to:
-Object.defineProperty(o, 'a', {
+Object.defineProperty(o, "a", {
   value: 1,
   writable: false,
   configurable: false,
-  enumerable: false
+  enumerable: false,
 });
 ```
 
@@ -316,23 +335,25 @@ Object.defineProperty(o, 'a', {
 
 - The example below shows how to implement a self-archiving object. When temperature property is set, the archive array gets a log entry.
 
-```
+```js
 function Archiver() {
   var temperature = null;
   var archive = [];
 
-  Object.defineProperty(this, 'temperature', {
+  Object.defineProperty(this, "temperature", {
     get() {
-      console.log('get!');
+      console.log("get!");
       return temperature;
     },
     set(value) {
       temperature = value;
       archive.push({ val: temperature });
-    }
+    },
   });
 
-  this.getArchive = function() { return archive; };
+  this.getArchive = function () {
+    return archive;
+  };
 }
 
 var arc = new Archiver();
@@ -344,23 +365,22 @@ arc.getArchive(); // [{ val: 11 }, { val: 13 }]
 
 - In this example, a getter always returns the same value.
 
-```
+```js
 var pattern = {
-    get() {
-        return 'I always return this string, ' +
-               'whatever you have assigned';
-    },
-    set() {
-        this.myname = 'this is my name string';
-    }
+  get() {
+    return "I always return this string, " + "whatever you have assigned";
+  },
+  set() {
+    this.myname = "this is my name string";
+  },
 };
 
 function TestDefineSetAndGet() {
-    Object.defineProperty(this, 'myproperty', pattern);
+  Object.defineProperty(this, "myproperty", pattern);
 }
 
 var instance = new TestDefineSetAndGet();
-instance.myproperty = 'test';
+instance.myproperty = "test";
 console.log(instance.myproperty);
 // I always return this string, whatever you have assigned
 
@@ -370,11 +390,10 @@ console.log(instance.myname); // this is my name string
 > > **Inheritance of properties**
 
 - If an accessor property is inherited, its get and set methods will be called when the property is accessed and modified on descendant objects.
-- If these methods use a variable to store the value, this value will be shared by all objects.
+- **If these methods use a variable to store the value, this value will be shared by all objects.**
 
-```
-function myclass() {
-}
+```js
+function myclass() {}
 
 var value;
 Object.defineProperty(myclass.prototype, "x", {
@@ -383,7 +402,7 @@ Object.defineProperty(myclass.prototype, "x", {
   },
   set(x) {
     value = x;
-  }
+  },
 });
 
 var a = new myclass();
@@ -394,9 +413,8 @@ console.log(b.x); // 1
 
 - This can be fixed by storing the value in another property. In get and set methods, this points to the object which is used to access or modify the property.
 
-```
-function myclass() {
-}
+```js
+function myclass() {}
 
 Object.defineProperty(myclass.prototype, "x", {
   get() {
@@ -404,7 +422,7 @@ Object.defineProperty(myclass.prototype, "x", {
   },
   set(x) {
     this.stored_x = x;
-  }
+  },
 });
 
 var a = new myclass();
@@ -415,14 +433,13 @@ console.log(b.x); // undefined
 
 - Unlike accessor properties, value properties are always set on the object itself, not on a prototype. However, if a non-writable value property is inherited, it still prevents from modifying the property on the object.
 
-```
-function myclass() {
-}
+```js
+function myclass() {}
 
 myclass.prototype.x = 1;
 Object.defineProperty(myclass.prototype, "y", {
   writable: false,
-  value: 1
+  value: 1,
 });
 
 var a = new myclass();

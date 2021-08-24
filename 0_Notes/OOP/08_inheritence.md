@@ -9,7 +9,7 @@
 
 ## Inheritance using Constructor function
 
-```
+```js
 function Book(title, author, year) {
   this.title = title;
   this.author = author;
@@ -20,9 +20,8 @@ Book.prototype.getSummary = function () {
 };
 ```
 
-```
+```js
 function Magazine(title, author, year, month) {
-
   Book.call(this, title, author, year);
   this.month = month;
 }
@@ -38,9 +37,8 @@ function Magazine(title, author, year, month) {
 - The last line inside the constructor defines the new "month" property that magazines are going to have, which generic books don't have.
 - As a note, we could have done this:
 
-```
+```js
 function Magazine(title, author, year, month) {
-
   this.title = title;
   this.author = author;
   this.year = year;
@@ -54,7 +52,7 @@ function Magazine(title, author, year, month) {
 
 - Note that if the constructor you are inheriting from doesn't take its property values from parameters, you don't need to specify them as additional arguments in call().
 
-```
+```js
 function Brick() {
   this.width = 10;
   this.height = 20;
@@ -63,12 +61,12 @@ function Brick() {
 
 - You could inherit the width and height properties by doing this
 
-```
+```jss
 function BlueGlassBrick() {
   Brick.call(this);
 
   this.opacity = 0.5;
-  this.color = 'blue';
+  this.color = "blue";
 }
 ```
 
@@ -76,7 +74,7 @@ function BlueGlassBrick() {
 
 ## Setting Magazine()'s prototype and constructor reference
 
-```
+```js
 const mag1 = new Magazine("mag 1", "John Doe", "2013", "jan");
 ```
 
@@ -84,26 +82,26 @@ const mag1 = new Magazine("mag 1", "John Doe", "2013", "jan");
 - We have defined a new constructor, and it has a prototype property, which b**y default just contains an object with a reference to the constructor function itself.**
 - It does not contain the methods of the Book constructor's prototype property.
 
-```
-console.log(mag1.__proto__);       // Magazine {}
-console.log(Magazine.prototype);   // Magazine {}
+```js
+console.log(mag1.__proto__); // Magazine {}
+console.log(Magazine.prototype); // Magazine {}
 console.log(Magazine.prototype.__proto__); // {}
-console.log(mag1.getSummary())  // ERROR: mag1.getSummary is not a function
+console.log(mag1.getSummary()); // ERROR: mag1.getSummary is not a function
 ```
 
 - also check the properties of both the constructor function
 
-```
-console.log(Object.getOwnPropertyNames(Magazine.prototype))
-        // [ 'constructor' ]
+```js
+console.log(Object.getOwnPropertyNames(Magazine.prototype));
+// [ 'constructor' ]
 
-console.log(Object.getOwnPropertyNames(Book.prototype))
-        // [ 'constructor', 'getSummary' ]
+console.log(Object.getOwnPropertyNames(Book.prototype));
+// [ 'constructor', 'getSummary' ]
 ```
 
-```
-console.log(Book.prototype.getSummary)       // [λ]
-console.log(Magazine.prototype.getSummary)  // undefined
+```js
+console.log(Book.prototype.getSummary); // [λ]
+console.log(Magazine.prototype.getSummary); // undefined
 ```
 
 - **We need to get Magazine() to inherit the methods defined on Book()'s prototype.**
@@ -111,49 +109,50 @@ console.log(Magazine.prototype.getSummary)  // undefined
 - Here our friend **create()** comes to the rescue again
 - In this case we are using it to create a new object and make it the value of Magazine.prototype.
 
-```
+```js
 Magazine.prototype = Object.create(Book.prototype);
 ```
 
 - The new object has Book.prototype as its prototype and will therefore inherit, if and when needed, all the methods available on Book.prototype.
 
-```
-console.log(Magazine.prototype)       // Book {} ​​​​​
-console.log(Magazine.prototype.__proto__)  // Book { getSummary: [λ] }
+```js
+console.log(Magazine.prototype); // Book {} ​​​​​
+console.log(Magazine.prototype.__proto__); // Book { getSummary: [λ] }
 ```
 
 - We need to do one more thing before we move on.
 - After adding the last line, **Magazine.prototype's constructor property** is now equal to **Book()**, because we just set Magazine.prototype to reference an object that inherits its properties from Book.prototype!
 
-```
-console.log(Magazine.prototype.constructor) // [λ: Book]
+```js
+console.log(Magazine.prototype.constructor); // [λ: Book]
 ```
 
 - This can become a problem, so we need to set this right.
 
-```
+```js
 Magazine.prototype.constructor = Magazine;
 ```
 
-```
-console.log(Magazine.prototype)    // Magazine { constructor: [λ: Magazine] }
-console.log(Magazine.prototype.__proto__)  // Book { getSummary: [λ] }
-console.log(Magazine.prototype.constructor)  //[λ: Magazine]
+```js
+console.log(Magazine.prototype); // Magazine { constructor: [λ: Magazine] }
+console.log(Magazine.prototype.__proto__); // Book { getSummary: [λ] }
+console.log(Magazine.prototype.constructor); //[λ: Magazine]
 ```
 
 #### **OR**
 
-```
-Object.defineProperty(Magazine.prototype, 'constructor', {
+```js
+Object.defineProperty(Magazine.prototype, "constructor", {
   value: Magazine,
   enumerable: false, // so that it does not appear in 'for in' loop
-  writable: true });
+  writable: true,
+});
 ```
 
-```
-console.log(Magazine.prototype)    // Magazine {}
-console.log(Magazine.prototype.__proto__)  // Book { getSummary: [λ] }
-console.log(Magazine.prototype.constructor)  //[λ: Magazine]
+```js
+console.log(Magazine.prototype); // Magazine {}
+console.log(Magazine.prototype.__proto__); // Book { getSummary: [λ] }
+console.log(Magazine.prototype.constructor); //[λ: Magazine]
 ```
 
 ## Object member summary
@@ -163,7 +162,7 @@ console.log(Magazine.prototype.constructor)  //[λ: Magazine]
   1. Those defined inside a constructor function that are given to object instances.
      - These are fairly easy to spot — in your own custom code, they are the members defined inside a constructor using the this.x = x type lines; in built in browser code, they are the members only available to object instances (usually created by calling a constructor using the new keyword, e.g.
 
-  ```
+  ```js
   let myInstance = new myConstructor()).
   ```
 
@@ -171,7 +170,7 @@ console.log(Magazine.prototype.constructor)  //[λ: Magazine]
      - that are available only on the constructor.
      - These are commonly only available on built-in browser objects, and are recognized by being chained directly onto a constructor, not an instance.
 
-  ```
+  ```js
   For example, Object.keys(). These are also known as static properties/methods.
   ```
 
@@ -197,12 +196,12 @@ console.log(Magazine.prototype.constructor)  //[λ: Magazine]
 
 - ECMAScript 2015 introduces class syntax to JavaScript as a way to write reusable classes using easier, cleaner syntax, which is more similar to classes in C++ or Java.
 
-```
+```js
 class Person {
   constructor(first, last, age, gender, interests) {
     this.name = {
       first,
-      last
+      last,
     };
     this.age = age;
     this.gender = gender;
@@ -211,11 +210,11 @@ class Person {
 
   greeting() {
     console.log(`Hi! I'm ${this.name.first}`);
-  };
+  }
 
   farewell() {
     console.log(`${this.name.first} has left the building. Bye for now!`);
-  };
+  }
 }
 ```
 
@@ -224,26 +223,24 @@ class Person {
 - greeting() and farewell() are class methods. Any methods you want associated with the class are defined inside it, after the constructor.
 - We can now instantiate object instances using the new operator, in just the same way as we did before:
 
-```
-let han = new Person('Han', 'Solo', 25, 'male', ['Smuggling']);
+```js
+let han = new Person("Han", "Solo", 25, "male", ["Smuggling"]);
 han.greeting();
 // Hi! I'm Han
 
-let leia = new Person('Leia', 'Organa', 19, 'female', ['Government']);
+let leia = new Person("Leia", "Organa", 19, "female", ["Government"]);
 leia.farewell();
 // Leia has left the building. Bye for now
 ```
 
-```
-Note: Under the hood, your classes are being converted into Prototypal Inheritance models — this is just syntactic sugar. But I'm sure you'll agree that it's easier to write.
-```
+`Note: Under the hood, your classes are being converted into Prototypal Inheritance models — this is just syntactic sugar. But I'm sure you'll agree that it's easier to write.`
 
 ### Inheritance with class syntax
 
 - Above we created a class to represent a person. They have a series of attributes that are common to all people; in this section we'll create our specialized Teacher class, making it inherit from Person using modern class syntax. This is called creating a subclass or subclassing.
 - To create a subclass we use the extends keyword to tell JavaScript the class we want to base our class on,
 
-```
+```js
 class Teacher extends Person {
   constructor(subject, grade) {
     this.subject = subject;
@@ -265,7 +262,7 @@ accessing 'this' or returning from derived constructor
 - Here we are extending the Person class — the Teacher sub-class is an extension of the Person class. So for Teacher, the this initialization is done by the Person constructor.
 - To call the parent constructor we have to use the super() operator, like so:
 
-```
+```js
 class Teacher extends Person {
   constructor(subject, grade) {
     super(); // Now 'this' is initialized by calling the parent constructor.
@@ -279,7 +276,7 @@ class Teacher extends Person {
 - It is good then, that the super() operator also accepts arguments for the parent constructor.
 - Looking back to our Person constructor, we can see it has the following block of code in its constructor method:
 
-```
+```js
  constructor(first, last, age, gender, interests) {
    this.name = {
      first,
@@ -293,7 +290,7 @@ class Teacher extends Person {
 
 - Since the super() operator is actually the parent class constructor, passing it the necessary arguments of the Parent class constructor will also initialize the parent class properties in our sub-class, thereby inheriting it
 
-```
+```js
 class Teacher extends Person {
   constructor(first, last, age, gender, interests, subject, grade) {
     super(first, last, age, gender, interests);
@@ -307,8 +304,16 @@ class Teacher extends Person {
 
 - Now when we instantiate Teacher object instances, we can call methods and properties defined on both Teacherand Person as we'd expect:
 
-```
-let snape = new Teacher('Severus', 'Snape', 58, 'male', ['Potions'], 'Dark arts', 5);
+```js
+let snape = new Teacher(
+  "Severus",
+  "Snape",
+  58,
+  "male",
+  ["Potions"],
+  "Dark arts",
+  5
+);
 snape.greeting(); // Hi! I'm Severus.
 snape.farewell(); // Severus has left the building. Bye for now.
 snape.age; // 58
@@ -323,7 +328,7 @@ snape.subject; // Dark arts
 - Let's enhance the Teacher class with getters and setters. The class starts the same as it was the last time we looked at it.
 - Getters and setters work in pairs. A getter returns the current value of the variable and its corresponding setter changes the value of the variable to the one it defines.
 
-```
+```js
 class Teacher extends Person {
   constructor(first, last, age, gender, interests, subject, grade) {
     super(first, last, age, gender, interests);
@@ -348,30 +353,26 @@ class Teacher extends Person {
   - To show the current value of the \_subject property of the snape object we can use the snape.subject getter method.
   - To assign a new value to the \_subject property we can use the snape.subject="new value" setter method.
 
-```
+```js
 // Check the default value
-console.log(snape.subject) // Returns "Dark arts"
+console.log(snape.subject); // Returns "Dark arts"
 
 // Change the value
-snape.subject = "Balloon animals" // Sets _subject to "Balloon animals"
+snape.subject = "Balloon animals"; // Sets _subject to "Balloon animals"
 
 // Check it again and see if it matches the new value
-console.log(snape.subject) // Returns "Balloon animals"
+console.log(snape.subject); // Returns "Balloon animals"
 ```
 
-```
-Note: Getters and setters can be very useful at times, for example when you want to run some code every time a property is requested or set. For simple cases, however, plain property access without a getter or setter will do just fine.
-```
+`Note: Getters and setters can be very useful at times, for example when you want to run some code every time a property is requested or set. For simple cases, however, plain property access without a getter or setter will do just fine.`
 
-```
-Note: Because of the way JavaScript works, with the prototype chain, etc., the sharing of functionality between objects is often called delegation. Specialized objects delegate functionality to a generic object type.
-```
+`Note: Because of the way JavaScript works, with the prototype chain, etc., the sharing of functionality between objects is often called delegation. Specialized objects delegate functionality to a generic object type.`
 
 ---
 
 ## Inheritence using Object.create()
 
-```
+```js
 const BookProtos = {
   getSummary: function () {
     return `${this.title} was written by ${this.author} in ${this.year}`;
@@ -390,7 +391,7 @@ const BookProtos = {
 };
 ```
 
-```
+```js
 const MagazineProtos = Object.create(BookProtos);
 MagazineProtos.init = function (title, author, year, coverImage) {
   BookProtos.init.call(this, title, author, year);
@@ -399,7 +400,7 @@ MagazineProtos.init = function (title, author, year, coverImage) {
 const mag1 = Object.create(MagazineProtos);
 ```
 
-```
+```js
 console.log(mag1); //{}
 console.log(mag1.__proto__); // { init}
 console.log(mag1.__proto__.__proto__); //{getSummary, getAge, init}

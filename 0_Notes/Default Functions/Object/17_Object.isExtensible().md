@@ -1,22 +1,24 @@
 # Object.isExtensible()
 
-- The Object.isExtensible() method determines if an object is extensible (whether it can have new properties added to it).
-- returns a Boolean indicating whether or not the given object is extensible.
+The **Object.isExtensible()** method determines if an object is extensible **(whether it can have new properties added to it).**
+
+returns a Boolean indicating whether or not the given object is extensible.
 
 #### **SYNTAX**
 
-```
-Object.isExtensible(obj)
+```js
+Object.isExtensible(obj);
 ```
 
-- Objects are extensible by default: they can have new properties added to them, and (in engines that support **proto**) their **proto** property can be modified.
-- An object can be marked as non-extensible using Object.preventExtensions(), Object.seal(), or Object.freeze().
+**Objects are extensible by default**: they can have new properties added to them, and (in engines that support **proto**) their **proto** property can be modified.
+
+`An object can be marked as non-extensible using Object.preventExtensions(), Object.seal(), or Object.freeze().`
 
 #### **EXAMPLES**
 
 > > **Using Object.isExtensible**
 
-```
+```js
 // New objects are extensible.
 var empty = {};
 Object.isExtensible(empty); // === true
@@ -39,7 +41,7 @@ Object.isExtensible(frozen); // === false
 - In ES5, if the argument to this method is not an object (a primitive), then it will cause a TypeError.
 - In ES2015, a non-object argument will be treated as if it was a non-extensible ordinary object, return false.
 
-```
+```js
 Object.isExtensible(1);
 // TypeError: 1 is not an object (ES5 code)
 
