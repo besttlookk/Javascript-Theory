@@ -47,7 +47,7 @@
 
 - **Syntax for creating an XMLHttpRequest object:**
 
-```
+```js
 variable = new XMLHttpRequest();
 ```
 
@@ -57,30 +57,30 @@ variable = new XMLHttpRequest();
 
 - In this case, the callback function should contain the code to execute when the response is ready.
 
-```
-xhttp.onload = function() {
-// What do do when the response is ready
-}
+```js
+xhttp.onload = function () {
+  // What do do when the response is ready
+};
 ```
 
 ## Send a Request
 
 - To send a request to a server, you can use the **open() and send() methods of the XMLHttpRequest object**:
 
-```
+```js
 xhttp.open("GET", "ajax_info.txt");
 xhttp.send();
 ```
 
-```
-Example
+```js
+Example;
 // Create an XMLHttpRequest object
 const xhttp = new XMLHttpRequest();
 
 // Define a callback function
-xhttp.onload = function() {
-// Here you can use the Data
-}
+xhttp.onload = function () {
+  // Here you can use the Data
+};
 
 // Send a request
 xhttp.open("GET", "ajax_info.txt");
@@ -92,8 +92,6 @@ xhttp.send();
 - For security reasons, modern browsers do not allow access across domains.
 
 - This means that both the web page and the XML file it tries to load, must be located on the same server.
-
-- The examples on W3Schools all open XML files located on the W3Schools domain.
 
 - If you want to use the example above on one of your own web pages, the XML files you load must be located on your own server.
 
@@ -141,11 +139,11 @@ xhttp.send();
 
 - The function is defined in the onload property of the XMLHttpRequest object:
 
-```
-Example
-xhttp.onload = function() {
+```js
+Example;
+xhttp.onload = function () {
   document.getElementById("demo").innerHTML = this.responseText;
-}
+};
 xhttp.open("GET", "ajax_info.txt");
 xhttp.send();
 ```
@@ -160,7 +158,7 @@ xhttp.send();
 - **The onreadystatechange function is called every time the readyState changes.**
 - When readyState is 4 and status is 200, the response is ready:
 
-```
+```js
 Example
 function loadDoc() {
   const xhttp = new XMLHttpRequest();
@@ -177,8 +175,8 @@ function loadDoc() {
 The onreadystatechange event is triggered four times (1-4), one time for each change in the readyState.
 ```
 
-```
-Example
+```js
+Example;
 xhttp.open("POST", "ajax_test.asp");
 xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 xhttp.send("fname=Henry&lname=Ford");
@@ -193,55 +191,54 @@ xhttp.send("fname=Henry&lname=Ford");
 
 > > **READING FILE USING onload()**
 
-```
-     function makerequest() {
-          var xhr = new XMLHttpRequest();
-          xhr.open("GET", "data.txt", true);
+```js
+function makerequest() {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "data.txt", true);
 
-//  jab readyState === 4 hoga tab ja ker ye callack function run hoga
-          xhr.onload = function () {
-            console.log(this); // XMLHttpRequest Object
-            console.log(this.status); // 200 or 404
-            console.log(this.statusText); // OK or Not Found
-            console.log(this.readyState); // 4
-            if (this.status == 200) {
-              var data = this.responseText;
-              document.getElementById("data").innerHTML = data;
-            } else {
-              console.log("Something went wrong");
-            }
-          };
-          xhr.send();
-        }
+  //  jab readyState === 4 hoga tab ja ker ye callack function run hoga
+  xhr.onload = function () {
+    console.log(this); // XMLHttpRequest Object
+    console.log(this.status); // 200 or 404
+    console.log(this.statusText); // OK or Not Found
+    console.log(this.readyState); // 4
+    if (this.status == 200) {
+      var data = this.responseText;
+      document.getElementById("data").innerHTML = data;
+    } else {
+      console.log("Something went wrong");
+    }
+  };
+  xhr.send();
+}
 ```
 
 > > **READING FILE USING onreadystatechange()**
 
-```
-   function makerequest() {
-        var xhr = new XMLHttpRequest();
-        console.log(xhr.readyState); // 0 : Object created BUT Request Not initialized
-        xhr.open("GET", "data.txt", true);
-        console.log(xhr.readyState); // 1 : Server connection establised
+```js
+function makerequest() {
+  var xhr = new XMLHttpRequest();
+  console.log(xhr.readyState); // 0 : Object created BUT Request Not initialized
+  xhr.open("GET", "data.txt", true);
+  console.log(xhr.readyState); // 1 : Server connection establised
 
-
-// yani ye callback function 3 baar run karega: for each change in readyState from [2 to 4]
-        xhr.onreadystatechange = function () {
-          console.log(this); // XHR Object
-          console.log(this.status); // 200
-          console.log(this.statusText); // OK
-          console.log(this.readyState); // 2[request received],3[processing request],4[request fininshed and response ready]
-          if (this.readyState == XMLHttpRequest.DONE) {
-            if (this.status == 200) {
-              //   console.log(xhr);
-              //   console.log(xhr.responseText);
-              var data = this.responseText;
-              document.getElementById("data").innerHTML = data;
-            } else {
-              console.log("Something went wrong");
-            }
-          }
-        };
-        xhr.send();
+  // yani ye callback function 3 baar run karega: for each change in readyState from [2 to 4]
+  xhr.onreadystatechange = function () {
+    console.log(this); // XHR Object
+    console.log(this.status); // 200
+    console.log(this.statusText); // OK
+    console.log(this.readyState); // 2[request received],3[processing request],4[request fininshed and response ready]
+    if (this.readyState == XMLHttpRequest.DONE) {
+      if (this.status == 200) {
+        //   console.log(xhr);
+        //   console.log(xhr.responseText);
+        var data = this.responseText;
+        document.getElementById("data").innerHTML = data;
+      } else {
+        console.log("Something went wrong");
       }
+    }
+  };
+  xhr.send();
+}
 ```

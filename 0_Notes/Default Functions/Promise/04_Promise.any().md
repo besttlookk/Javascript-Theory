@@ -1,11 +1,12 @@
 # Promise.any() : static method
 
-- Promise.any() takes an iterable of Promise objects and, as soon as one of the promises in the iterable fulfills, returns a single promise that resolves with the value from that promise.
-- If no promises in the iterable fulfill (if all of the given promises are rejected), then the returned promise is rejected with an AggregateError, a new subclass of Error that groups together individual errors.
+Promise.any() takes an iterable of Promise objects and, as soon as one of the promises in the iterable fulfills, **returns a single promise that resolves with the value from that promise.**
+
+If no promises in the iterable fulfill (if all of the given promises are rejected), then the returned promise is rejected with an AggregateError, a new subclass of Error that groups together individual errors.
 
 #### **SYNTAX**
 
-```
+```js
 Promise.any(iterable);
 
 iterable
@@ -20,9 +21,17 @@ An iterable object, such as an Array.
 
 #### **DESCRIPTION**
 
-- This method is useful for returning the first promise that fulfills. It short-circuits after a promise fulfills, so it does not wait for the other promises to complete once it finds one. Unlike Promise.all(), which returns an array of fulfillment values, we only get one fulfillment value (assuming at least one promise fulfills). This can be beneficial if we need only one promise to fulfill but we do not care which one does. Note another difference: This method rejects upon receiving an empty iterable, since, truthfully, the iterable contains no items that fulfill.
+- This method is useful for returning the first promise that fulfills.
 
-- Also, unlike Promise.race(), which returns the first settled value (either fulfillment or rejection), this method returns the first fulfilled value. This method will ignore all rejected promises up until the first promise that fulfils.
+- It short-circuits after a promise fulfills, so it does not wait for the other promises to complete once it finds one.
+
+- Unlike Promise.all(), which returns an array of fulfillment values, we only get one fulfillment value (assuming at least one promise fulfills).
+
+- This can be beneficial if we need only one promise to fulfill but we do not care which one does.
+
+`Note another difference: This method rejects upon receiving an empty iterable, since, truthfully, the iterable contains no items that fulfill.`
+
+`Also, unlike Promise.race(), which returns the first settled value (either fulfillment or rejection), this method returns the first fulfilled value. This method will ignore all rejected promises up until the first promise that fulfils.`
 
 ### Fulfillment
 
@@ -38,9 +47,9 @@ An iterable object, such as an Array.
 
 > > **First to fulfil**
 
-- Promise.any() resolves with the first promise to fulfil, even if a promise rejects first. This is in contrast to Promise.race(), which resolves or rejects with the first promise to settle.
+Promise.any() resolves with the first promise to fulfil, even if a promise rejects first. This is in contrast to Promise.race(), which resolves or rejects with the first promise to settle.
 
-```
+```js
 const pErr = new Promise((resolve, reject) => {
   reject("Always fails");
 });
@@ -56,7 +65,7 @@ const pFast = new Promise((resolve, reject) => {
 Promise.any([pErr, pSlow, pFast]).then((value) => {
   console.log(value);
   // pFast fulfils first
-})
+});
 // expected output: "Done quick"
 ```
 
@@ -64,14 +73,14 @@ Promise.any([pErr, pSlow, pFast]).then((value) => {
 
 - Promise.any() rejects with an AggregateError if no promise fulfils.
 
-```
+```js
 const pErr = new Promise((resolve, reject) => {
-  reject('Always fails');
+  reject("Always fails");
 });
 
 Promise.any([pErr]).catch((err) => {
   console.log(err);
-})
+});
 // expected output: "AggregateError: No Promise in Promise.any was resolved"
 ```
 
@@ -104,14 +113,24 @@ Promise.any([coffee, tea]).then(value => {
 });
 ```
 
-```
+```js
 const promise1 = Promise.reject(0);
-const promise2 = new Promise((resolve) => setTimeout(resolve, 100, 'quick'));
-const promise3 = new Promise((resolve) => setTimeout(resolve, 500, 'slow'));
+const promise2 = new Promise((resolve) => setTimeout(resolve, 100, "quick"));
+const promise3 = new Promise((resolve) => setTimeout(resolve, 500, "slow"));
 
 const promises = [promise1, promise2, promise3];
 
 Promise.any(promises).then((value) => console.log(value));
 
 // expected output: "quick"
+```
+
+```js
+Promise.any([
+  Promise.resolve("Success"),
+  Promise.reject("ERROR"),
+  Promise.resolve("Another success"),
+])
+  .then((res) => console.log(res))
+  .catch((err) => console.error(err));
 ```

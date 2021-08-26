@@ -4,7 +4,7 @@
 
 #### **SYNTAX**
 
-```
+```js
 new constructor[([arguments])]
 
 constructor
@@ -29,32 +29,32 @@ Note: Properties/objects added to the construction function prototype are theref
   1. Define the object type by writing a function that specifies its name and properties. For example, a constructor function to create an object Foomight look like this:
   2. Create an instance of the object with new
 
-```
+```js
 function Foo(bar1, bar2) {
   this.bar1 = bar1;
   this.bar2 = bar2;
 }
 
-var myFoo = new Foo('Bar 1', 2021);
+var myFoo = new Foo("Bar 1", 2021);
 ```
 
 - You can add a shared property to a previously defined object type by using the Function.prototype property. This defines a property that is shared by all objects created with that function, rather than by just one instance of the object type.
 
-```
+```js
 function Car() {}
 car1 = new Car();
 car2 = new Car();
 
-console.log(car1.color);    // undefined
+console.log(car1.color); // undefined
 
-Car.prototype.color = 'original color';
-console.log(car1.color);    // 'original color'
+Car.prototype.color = "original color";
+console.log(car1.color); // 'original color'
 
-car1.color = 'black';
-console.log(car1.color);    // 'black'
+car1.color = "black";
+console.log(car1.color); // 'black'
 
 console.log(Object.getPrototypeOf(car1).color); // 'original color'
 console.log(Object.getPrototypeOf(car2).color); // 'original color'
-console.log(car1.color);   // 'black'
-console.log(car2.color);   // 'original color'
+console.log(car1.color); // 'black'
+console.log(car2.color); // 'original color'
 ```

@@ -1,13 +1,14 @@
 # Fetch API
 
-- The Fetch API provides an interface for fetching resources (including across the network).
-- It will seem familiar to anyone who has used XMLHttpRequest, but the new API provides a more powerful and flexible feature set.
+The Fetch API provides an interface for fetching resources (including across the network).
+
+It will seem familiar to anyone who has used XMLHttpRequest, but the new API provides a more powerful and flexible feature set.
 
 ## Concepts and usage
 
 - Fetch provides a generic definition of **Request and Response objects** (and other things involved with network requests).
-- This will allow them to be used wherever they are needed in the future, whether it’s for service workers, Cache API, and other similar things that handle or modify requests and responses, or any kind of use case that might require you to generate your responses programmatically (that is, the use of computer program or personal programming instructions).
-- It also defines related concepts such as CORS and the HTTP Origin header semantics, supplanting their separate definitions elsewhere.
+- This will allow them to be used wherever they are needed in the future, whether it’s for **service workers**, **Cache API**, and other similar things that handle or modify requests and responses, or any kind of use case that might require you to **generate your responses programmatically** (that is, the use of computer program or personal programming instructions).
+- It also defines related concepts such as **CORS and the HTTP Origin header semantics,** supplanting their separate definitions elsewhere.
 - For making a request and fetching a resource, use the **WindowOrWorkerGlobalScope.fetch() method.** It is implemented in multiple interfaces, specifically Window and WorkerGlobalScope. This makes it available in pretty much any context you might want to fetch resources in.
 - **The fetch() method takes one mandatory argument**, the path to the resource you want to fetch. **It returns a Promise that resolves to the Response** to that request — as soon as the server responds with headers — even if the server response is an HTTP error status. You can also optionally pass in an init options object as the second argument (see Request).
 - Once a Response is retrieved, there are a number of methods available to define what the body content is and how it should be handled.
@@ -100,163 +101,160 @@ const fetchResponsePromise = fetch(resource [, init])
 - we create a new Request object using the relevant constructor, then fetch it using a fetch() call.
 - Since we are fetching an image, we run Response.blob() on the response to give it the proper MIME type so it will be handled properly, then create an Object URL of it and display it in an \<img> element.
 
-```
-const myImage = document.querySelector('img');
+```js
+const myImage = document.querySelector("img");
 
-let myRequest = new Request('flowers.jpg');
+let myRequest = new Request("flowers.jpg");
 
 fetch(myRequest)
-.then(function(response) {
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return response.blob();
-})
-.then(function(response) {
-  let objectURL = URL.createObjectURL(response);
-  myImage.src = objectURL;
-})
+  .then(function (response) {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.blob();
+  })
+  .then(function (response) {
+    let objectURL = URL.createObjectURL(response);
+    myImage.src = objectURL;
+  });
 ```
 
 - In the Fetch with init then Request example (see Fetch Request init live), we do the same thing except that we pass in an init object when we invoke fetch():
 
-```
-const myImage = document.querySelector('img');
+```js
+const myImage = document.querySelector("img");
 
 let myHeaders = new Headers();
-myHeaders.append('Accept', 'image/jpeg');
+myHeaders.append("Accept", "image/jpeg");
 
 const myInit = {
-  method: 'GET',
+  method: "GET",
   headers: myHeaders,
-  mode: 'cors',
-  cache: 'default'
+  mode: "cors",
+  cache: "default",
 };
 
-let myRequest = new Request('flowers.jpg');
+let myRequest = new Request("flowers.jpg");
 
-fetch(myRequest, myInit).then(function(response) {
+fetch(myRequest, myInit).then(function (response) {
   // ...
 });
 ```
 
 - You could also pass the init object in with the Request constructor to get the same effect:
 
-```
-let myRequest = new Request('flowers.jpg', myInit);
+```js
+let myRequest = new Request("flowers.jpg", myInit);
 ```
 
 - You can also use an object literal as headers in init.
 
-```
+```js
 const myInit = {
-  method: 'GET',
+  method: "GET",
   headers: {
-    'Accept': 'image/jpeg'
+    Accept: "image/jpeg",
   },
-  mode: 'cors',
-  cache: 'default'
+  mode: "cors",
+  cache: "default",
 };
 
-let myRequest = new Request('flowers.jpg', myInit);
+let myRequest = new Request("flowers.jpg", myInit);
 ```
 
 > > **GET REQUEST**
 
-```
-fetch('https://jsonplaceholder.typicode.com/posts')
-        .then(res => res.json())
-        .then(data => {
-            data.forEach(item => {
-                console.log(item.title)
-            })
-        })
+```js
+fetch("https://jsonplaceholder.typicode.com/posts")
+  .then((res) => res.json())
+  .then((data) => {
+    data.forEach((item) => {
+      console.log(item.title);
+    });
+  });
 ```
 
 > > **POST REQUEST**
 
-```
-      fetch('https://jsonplaceholder.typicode.com/posts',{
-          method: 'POST',
-          headers: {"Content-Type" : "application/json"},
-          body: JSON.stringify({
-              title: 'New title',
-              body: 'new title body',
-              userId: 2000
-                  })
-      })
-      .then(res => res.json())
-      .then(data => console.log(data))
+```js
+fetch("https://jsonplaceholder.typicode.com/posts", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    title: "New title",
+    body: "new title body",
+    userId: 2000,
+  }),
+})
+  .then((res) => res.json())
+  .then((data) => console.log(data));
 ```
 
 > > **UPDATE(PUT)**
 
-```
- fetch('https://jsonplaceholder.typicode.com/posts/1', {
-          method: 'PUT',
-          headers: {"Content-Type": "application/json; charset=UTF-8"},
-          body: JSON.stringify({
-              title: 'title 1',
-              body: 'title 1 body',
-              userId: '1001'
-          })
-      })
-      .then(res => res.json())
-      .then(data => console.log(data))
+```js
+fetch("https://jsonplaceholder.typicode.com/posts/1", {
+  method: "PUT",
+  headers: { "Content-Type": "application/json; charset=UTF-8" },
+  body: JSON.stringify({
+    title: "title 1",
+    body: "title 1 body",
+    userId: "1001",
+  }),
+})
+  .then((res) => res.json())
+  .then((data) => console.log(data));
 ```
 
 > > **UPDATE(PATCH)**
 
-```
-  fetch('https://jsonplaceholder.typicode.com/posts/1', {
-          method: 'PATCH',
-          headers: {"Content-Type": "application/json; charset=UTF-8"},
-          body: JSON.stringify({
-              title: 'title 1'
-
-          })
-      })
-      .then(res => res.json())
-      .then(data => console.log(data))
+```js
+fetch("https://jsonplaceholder.typicode.com/posts/1", {
+  method: "PATCH",
+  headers: { "Content-Type": "application/json; charset=UTF-8" },
+  body: JSON.stringify({
+    title: "title 1",
+  }),
+})
+  .then((res) => res.json())
+  .then((data) => console.log(data));
 ```
 
 > > **delete**
 
-```
- fetch('https://jsonplaceholder.typicode.com/posts/1', {
-          method: 'delete'
-      })
+```js
+fetch("https://jsonplaceholder.typicode.com/posts/1", {
+  method: "delete",
+});
 ```
 
 > > **Supplying request options**
 
-- The fetch() method can optionally accept a second parameter, an init object that allows you to control a number of different settings:
+The fetch() method can optionally accept a second parameter, an init object that allows you to control a number of different settings:
 
-```
+```js
 // Example POST method implementation:
-async function postData(url = '', data = {}) {
+async function postData(url = "", data = {}) {
   // Default options are marked with *
   const response = await fetch(url, {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, *cors, same-origin
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "same-origin", // include, *same-origin, omit
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
       // 'Content-Type': 'application/x-www-form-urlencoded',
     },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data) // body data type must match "Content-Type" header
+    redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
   });
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
-postData('https://example.com/answer', { answer: 42 })
-  .then(data => {
-    console.log(data); // JSON data parsed by `data.json()` call
-  });
-
+postData("https://example.com/answer", { answer: 42 }).then((data) => {
+  console.log(data); // JSON data parsed by `data.json()` call
+});
 ```
 
 ```
@@ -272,67 +270,67 @@ Content-Type with a value of application/x-www-form-urlencoded, multipart/form-d
 
 - Files can be uploaded using an HTML \<input type="file" /> input element, FormData() and fetch().
 
-```
+```js
 const formData = new FormData();
 const fileField = document.querySelector('input[type="file"]');
 
-formData.append('username', 'abc123');
-formData.append('avatar', fileField.files[0]);
+formData.append("username", "abc123");
+formData.append("avatar", fileField.files[0]);
 
-fetch('https://example.com/profile/avatar', {
-  method: 'PUT',
-  body: formData
+fetch("https://example.com/profile/avatar", {
+  method: "PUT",
+  body: formData,
 })
-.then(response => response.json())
-.then(result => {
-  console.log('Success:', result);
-})
-.catch(error => {
-  console.error('Error:', error);
-});
+  .then((response) => response.json())
+  .then((result) => {
+    console.log("Success:", result);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
 ```
 
 > > **Uploading multiple files**
 
 - Files can be uploaded using an HTML \<input type="file" multiple /> input element, FormData() and fetch().
 
-```
+```js
 const formData = new FormData();
 const photos = document.querySelector('input[type="file"][multiple]');
 
-formData.append('title', 'My Vegas Vacation');
+formData.append("title", "My Vegas Vacation");
 for (let i = 0; i < photos.files.length; i++) {
-  formData.append('photos', photos.files[i]);
+  formData.append("photos", photos.files[i]);
 }
 
-fetch('https://example.com/posts', {
-  method: 'POST',
+fetch("https://example.com/posts", {
+  method: "POST",
   body: formData,
 })
-.then(response => response.json())
-.then(result => {
-  console.log('Success:', result);
-})
-.catch(error => {
-  console.error('Error:', error);
-});
+  .then((response) => response.json())
+  .then((result) => {
+    console.log("Success:", result);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
 ```
 
 > > **Checking that the fetch was successful**
 
-```
-fetch('flowers.jpg')
-  .then(response => {
+```js
+fetch("flowers.jpg")
+  .then((response) => {
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
     return response.blob();
   })
-  .then(myBlob => {
+  .then((myBlob) => {
     myImage.src = URL.createObjectURL(myBlob);
   })
-  .catch(error => {
-    console.error('There has been a problem with your fetch operation:', error);
+  .catch((error) => {
+    console.error("There has been a problem with your fetch operation:", error);
   });
 ```
 
@@ -340,26 +338,26 @@ fetch('flowers.jpg')
 
 - Instead of passing a path to the resource you want to request into the fetch() call, you can create a request object using the Request() constructor, and pass that in as a fetch() method argument:
 
-```
+```js
 const myHeaders = new Headers();
 
-const myRequest = new Request('flowers.jpg', {
-  method: 'GET',
+const myRequest = new Request("flowers.jpg", {
+  method: "GET",
   headers: myHeaders,
-  mode: 'cors',
-  cache: 'default',
+  mode: "cors",
+  cache: "default",
 });
 
 fetch(myRequest)
-  .then(response => response.blob())
-  .then(myBlob => {
+  .then((response) => response.blob())
+  .then((myBlob) => {
     myImage.src = URL.createObjectURL(myBlob);
   });
 ```
 
 - Request() accepts exactly the same parameters as the fetch() method. You can even pass in an existing request object to create a copy of it:
 
-```
+```js
 const anotherRequest = new Request(myRequest, myInit);
 ```
 
@@ -371,66 +369,66 @@ const anotherRequest = new Request(myRequest, myInit);
 
 - The Headers interface allows you to create your own headers object via the Headers() constructor. A headers object is a simple multi-map of names to values:
 
-```
-const content = 'Hello World';
+```js
+const content = "Hello World";
 const myHeaders = new Headers();
-myHeaders.append('Content-Type', 'text/plain');
-myHeaders.append('Content-Length', content.length.toString());
-myHeaders.append('X-Custom-Header', 'ProcessThisImmediately');
+myHeaders.append("Content-Type", "text/plain");
+myHeaders.append("Content-Length", content.length.toString());
+myHeaders.append("X-Custom-Header", "ProcessThisImmediately");
 ```
 
 - The same can be achieved by passing an array of arrays or an object literal to the constructor:
 
-```
+```js
 const myHeaders = new Headers({
-  'Content-Type': 'text/plain',
-  'Content-Length': content.length.toString(),
-  'X-Custom-Header': 'ProcessThisImmediately'
+  "Content-Type": "text/plain",
+  "Content-Length": content.length.toString(),
+  "X-Custom-Header": "ProcessThisImmediately",
 });
 ```
 
 - The contents can be queried and retrieved:
 
-```
-console.log(myHeaders.has('Content-Type')); // true
-console.log(myHeaders.has('Set-Cookie')); // false
-myHeaders.set('Content-Type', 'text/html');
-myHeaders.append('X-Custom-Header', 'AnotherValue');
+```js
+console.log(myHeaders.has("Content-Type")); // true
+console.log(myHeaders.has("Set-Cookie")); // false
+myHeaders.set("Content-Type", "text/html");
+myHeaders.append("X-Custom-Header", "AnotherValue");
 
-console.log(myHeaders.get('Content-Length')); // 11
-console.log(myHeaders.get('X-Custom-Header')); // ['ProcessThisImmediately', 'AnotherValue']
+console.log(myHeaders.get("Content-Length")); // 11
+console.log(myHeaders.get("X-Custom-Header")); // ['ProcessThisImmediately', 'AnotherValue']
 
-myHeaders.delete('X-Custom-Header');
-console.log(myHeaders.get('X-Custom-Header')); // null
+myHeaders.delete("X-Custom-Header");
+console.log(myHeaders.get("X-Custom-Header")); // null
 ```
 
 - Some of these operations are only useful in ServiceWorkers, but they provide a much nicer API for manipulating headers.
 - All of the Headers methods throw a TypeError if a header name is used that is not a valid HTTP Header name. The mutation operations will throw a TypeError if there is an immutable guard (see below). Otherwise, they fail silently. For example
 
-```
+```js
 const myResponse = Response.error();
 try {
-  myResponse.headers.set('Origin', 'http://mybank.com');
+  myResponse.headers.set("Origin", "http://mybank.com");
 } catch (e) {
-  console.log('Cannot pretend to be a bank!');
+  console.log("Cannot pretend to be a bank!");
 }
 ```
 
 - A good use case for headers is checking whether the content type is correct before you process it further. For example:
 
-```
+```js
 fetch(myRequest)
-  .then(response => {
-     const contentType = response.headers.get('content-type');
-     if (!contentType || !contentType.includes('application/json')) {
-       throw new TypeError("Oops, we haven't got JSON!");
-     }
-     return response.json();
+  .then((response) => {
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new TypeError("Oops, we haven't got JSON!");
+    }
+    return response.json();
   })
-  .then(data => {
-      /* process your data further */
+  .then((data) => {
+    /* process your data further */
   })
-  .catch(error => console.error(error));
+  .catch((error) => console.error(error));
 ```
 
 ### Guard
@@ -454,19 +452,17 @@ fetch(myRequest)
   - Response.ok — seen in use above, this is a shorthand for checking that status is in the range 200-299 inclusive. This returns a boolean value.
 - They can also be created programmatically via JavaScript, but this is only really useful in ServiceWorkers, when you are providing a custom response to a received request using a respondWith() method:
 
-```
+```js
 const myBody = new Blob();
 
-addEventListener('fetch', function(event) {
+addEventListener("fetch", function (event) {
   // ServiceWorker intercepting a fetch
   event.respondWith(
     new Response(myBody, {
-      headers: { 'Content-Type': 'text/plain' }
+      headers: { "Content-Type": "text/plain" },
     })
   );
 });
-
-
 ```
 
 - The Response() constructor takes two optional arguments — a body for the response, and an init object (similar to the one that Request() accepts.)
@@ -491,13 +487,12 @@ addEventListener('fetch', function(event) {
 - This makes usage of non-textual data much easier than it was with XHR.
 - Request bodies can be set by passing body parameters:
 
-```
-const form = new FormData(document.getElementById('login-form'));
-fetch('/login', {
-  method: 'POST',
-  body: form
+```js
+const form = new FormData(document.getElementById("login-form"));
+fetch("/login", {
+  method: "POST",
+  body: form,
 });
-
 ```
 
 - Both request and response (and by extension the fetch() function), will try to intelligently determine the content type. A request will also automatically set a Content-Type header if none is set in the dictionary.

@@ -15,7 +15,7 @@
 
 #### **SYNTAX**
 
-```
+```js
 var myHeaders = new Headers(init);
 ```
 
@@ -23,29 +23,32 @@ var myHeaders = new Headers(init);
 
 - Creating an empty Headers object is simple:
 
-```
+```js
 var myHeaders = new Headers(); // Currently empty
 ```
 
 - You could add a header to this using Headers.append:
 
-```
-myHeaders.append('Content-Type', 'image/jpeg');
-myHeaders.get('Content-Type'); // Returns 'image/jpeg'
+```js
+myHeaders.append("Content-Type", "image/jpeg");
+myHeaders.get("Content-Type"); // Returns 'image/jpeg'
 ```
 
 - Or you can add the headers you want as the Headers object is created. In the following snippet we create a new Headers object, adding some headers by passing the constructor an init object as an argument:
 
-```
-var httpHeaders = { 'Content-Type' : 'image/jpeg', 'X-My-Custom-Header' : 'Zeke are cool' };
+```js
+var httpHeaders = {
+  "Content-Type": "image/jpeg",
+  "X-My-Custom-Header": "Zeke are cool",
+};
 var myHeaders = new Headers(httpHeaders);
 ```
 
 - You can now create another Headers object, passing it the first Headers object as its init object:
 
-```
+```js
 var secondHeadersObj = new Headers(myHeaders);
-secondHeadersObj.get('Content-Type'); // Would return 'image/jpeg' — it inherits it from the first headers object
+secondHeadersObj.get("Content-Type"); // Would return 'image/jpeg' — it inherits it from the first headers object
 ```
 
 ## Headers Methods:
@@ -69,16 +72,16 @@ secondHeadersObj.get('Content-Type'); // Would return 'image/jpeg' — it inheri
   - The both the key and value of each pairs are ByteString objects.
   - returns an iterator.
 
-    ```
-        // Create a test Headers object
-      var myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'text/xml');
-      myHeaders.append('Vary', 'Accept-Language');
+    ```js
+    // Create a test Headers object
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "text/xml");
+    myHeaders.append("Vary", "Accept-Language");
 
-      // Display the key/value pairs
-      for (var pair of myHeaders.entries()) {
-        console.log(pair[0]+ ': '+ pair[1]);
-      }
+    // Display the key/value pairs
+    for (var pair of myHeaders.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
     ```
 
     ###### OUTPUT
@@ -91,9 +94,9 @@ secondHeadersObj.get('Content-Type'); // Would return 'image/jpeg' — it inheri
 - **myHeaders.get(name)**
   - The get() method of the Headers interface returns a byte string of all the values of a header within a Headers object with a given name.
   - If the requested header doesn't exist in the Headers object, it returns null.
-    ```
-    myHeaders.append('Content-Type', 'image/jpeg');
-    myHeaders.get('Content-Type'); // Returns "image/jpeg"
+    ```js
+    myHeaders.append("Content-Type", "image/jpeg");
+    myHeaders.get("Content-Type"); // Returns "image/jpeg"
     ```
 - **myHeaders.has(name)**
   - The has() method of the Headers interface returns a boolean stating whether a Headers object contains a certain header.
@@ -101,16 +104,16 @@ secondHeadersObj.get('Content-Type'); // Would return 'image/jpeg' — it inheri
 
   - The Headers.keys() method returns an iterator allowing to go through all keys contained in this object. The keys are ByteString objects.
 
-    ```
-        // Create a test Headers object
-      var myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'text/xml');
-      myHeaders.append('Vary', 'Accept-Language');
+    ```js
+    // Create a test Headers object
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "text/xml");
+    myHeaders.append("Vary", "Accept-Language");
 
-      // Display the keys
-      for(var key of myHeaders.keys()) {
-        console.log(key);
-      }
+    // Display the keys
+    for (var key of myHeaders.keys()) {
+      console.log(key);
+    }
     ```
 
 - **myHeaders.set(name, value);**
@@ -120,11 +123,11 @@ secondHeadersObj.get('Content-Type'); // Would return 'image/jpeg' — it inheri
 
   - The Headers.values() method returns an iterator allowing to go through all values contained in this object. The values are ByteString objects.
 
-  ```
+  ```js
   // Create a test Headers object
   var myHeaders = new Headers();
-  myHeaders.append('Content-Type', 'text/xml');
-  myHeaders.append('Vary', 'Accept-Language');
+  myHeaders.append("Content-Type", "text/xml");
+  myHeaders.append("Vary", "Accept-Language");
 
   // Display the values
   for (var value of myHeaders.values()) {
@@ -145,7 +148,7 @@ secondHeadersObj.get('Content-Type'); // Would return 'image/jpeg' — it inheri
 
 #### **SYNTAX**
 
-```
+```js
 var myRequest = new Request(input[, init]);
 ```
 
@@ -171,28 +174,32 @@ var myRequest = new Request(input[, init]);
 
 #### **EXAMPLE**
 
+```js
+var myImage = document.querySelector("img");
+
+var myRequest = new Request("flowers.jpg");
+
+fetch(myRequest)
+  .then(function (response) {
+    return response.blob();
+  })
+  .then(function (response) {
+    var objectURL = URL.createObjectURL(response);
+    myImage.src = objectURL;
+  });
 ```
-var myImage = document.querySelector('img');
 
-var myRequest = new Request('flowers.jpg');
+```js
+var myInit = {
+  method: "GET",
+  headers: {
+    "Content-Type": "image/jpeg",
+  },
+  mode: "cors",
+  cache: "default",
+};
 
-fetch(myRequest).then(function(response) {
-  return response.blob();
-}).then(function(response) {
-  var objectURL = URL.createObjectURL(response);
-  myImage.src = objectURL;
-});
-```
-
-```
-var myInit = { method: 'GET',
-               headers: {
-                   'Content-Type': 'image/jpeg'
-               },
-               mode: 'cors',
-               cache: 'default' };
-
-var myRequest = new Request('flowers.jpg', myInit);
+var myRequest = new Request("flowers.jpg", myInit);
 ```
 
 #### **PROPERTIES**
@@ -229,21 +236,21 @@ var myRequest = new Request('flowers.jpg', myInit);
 - **Request.arrayBuffer()**
   - The arrayBuffer() method of the Request interface reads the request body and returns it as a promise that resolves with an ArrayBuffer.
 
-```
-request.arrayBuffer().then(function(buffer) {
-   // do something with the buffer
+```js
+request.arrayBuffer().then(function (buffer) {
+  // do something with the buffer
 });
 ```
 
-```
+```js
 const myArray = new Uint8Array(10);
 
-const request = new Request('/myEndpoint', {
-  method: 'POST',
-  body: myArray
+const request = new Request("/myEndpoint", {
+  method: "POST",
+  body: myArray,
 });
 
-request.arrayBuffer().then(function(buffer) {
+request.arrayBuffer().then(function (buffer) {
   // do something with the buffer sent in the request
 });
 ```
@@ -251,22 +258,24 @@ request.arrayBuffer().then(function(buffer) {
 - **Request.blob()**
   - The blob() method of the Request interface reads the request body and returns it as a promise that resolves with a Blob.
 
-```
-request.blob().then(function(myBlob) {
+```js
+request.blob().then(function (myBlob) {
   // do something with myBlob
 });
 ```
 
-```
-const obj = {hello: 'world'};
-const myBlob = new Blob([JSON.stringify(obj, null, 2)], {type : 'application/json'});
+```js
+const obj = { hello: "world" };
+const myBlob = new Blob([JSON.stringify(obj, null, 2)], {
+  type: "application/json",
+});
 
-const request = new Request('/myEndpoint', {
-  method: 'POST',
-  body: myBlob
- });
+const request = new Request("/myEndpoint", {
+  method: "POST",
+  body: myBlob,
+});
 
-request.blob().then(function(myBlob) {
+request.blob().then(function (myBlob) {
   // do something with the blob sent in the request
 });
 ```
@@ -274,25 +283,25 @@ request.blob().then(function(myBlob) {
 - **Request.formData()**
   - The formData() method of the Request interface reads the request body and returns it as a promise that resolves with a FormData object.
 
-```
-request.formData().then(function(formdata) {
+```js
+request.formData().then(function (formdata) {
   // do something with your formdata
 });
 ```
 
-```
+```js
 const formData = new FormData();
 const fileField = document.querySelector('input[type="file"]');
 
-formData.append('username', 'abc123');
-formData.append('avatar', fileField.files[0]);
+formData.append("username", "abc123");
+formData.append("avatar", fileField.files[0]);
 
-const request = new Request('/myEndpoint', {
-  method: 'POST',
-  body: formData
+const request = new Request("/myEndpoint", {
+  method: "POST",
+  body: formData,
 });
 
-request.formData().then(function(data) {
+request.formData().then(function (data) {
   // do something with the formdata sent in the request
 });
 ```
@@ -301,21 +310,21 @@ request.formData().then(function(data) {
   - The json() method of the Request interface reads the request body and returns it as a promise that resolves with the result of parsing the body text as JSON.
   - Note that despite the method being named json(), the result is not JSON but is instead the result of taking JSON as input and parsing it to produce a JavaScript object.
 
-```
-request.json().then(data => {
+```js
+request.json().then((data) => {
   // do something with your data
 });
 ```
 
-```
-const obj = {hello: 'world'};
+```js
+const obj = { hello: "world" };
 
-const request = new Request('/myEndpoint', {
-  method: 'POST',
-  body: JSON.stringify(obj)
- });
+const request = new Request("/myEndpoint", {
+  method: "POST",
+  body: JSON.stringify(obj),
+});
 
-request.json().then(function(data) {
+request.json().then(function (data) {
   // do something with the data sent in the request
 });
 ```
@@ -323,21 +332,21 @@ request.json().then(function(data) {
 - **Request.text()**
   - The text() method of the Request interface reads the request body and returns it as a promise that resolves with a String. The response is always decoded using UTF-8.
 
-```
+```js
 request.text().then(function (text) {
   // do something with the text sent in the request
 });
 ```
 
-```
+```js
 const text = "Hello world";
 
-const request = new Request('/myEndpoint', {
-  method: 'POST',
-  body: text
+const request = new Request("/myEndpoint", {
+  method: "POST",
+  body: text,
 });
 
-request.text().then(function(text) {
+request.text().then(function (text) {
   // do something with the text sent in the request
 });
 ```

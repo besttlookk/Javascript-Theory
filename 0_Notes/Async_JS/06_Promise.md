@@ -5,7 +5,7 @@
 
 ## What are promises?
 
-- Essentially, a Promise is an object that represents an intermediate state of an operation — in effect, a promise that a result of some kind will be returned at some point in the future.
+- Essentially, a **Promise is an object** that represents an intermediate state of an operation — in effect, a promise that a result of some kind will be returned at some point in the future.
 - There is no guarantee of exactly when the operation will complete and the result will be returned, but there is a guarantee that when the result is available, or the promise fails, the code you provide will be executed in order to do something else with a successful result, or to gracefully handle a failure case.
 - Generally, you are less interested in the amount of time an async operation will take to return its result (unless of course, it takes far too long!), and more interested in being able to respond to it being returned, whenever that is. And of course, it's nice that it doesn't block the rest of the code execution.
 - One of the most common engagements you'll have with promises is with web APIs that return a promise.
@@ -14,13 +14,21 @@
 
 - Let's talk about ordering pizza as an analogy. There are certain steps that you have to take for your order to be successful, which doesn't really make sense to try to execute out of order, or in order but before each previous step has quite finished:
 
-```
-chooseToppings(function(toppings) {
-  placeOrder(toppings, function(order) {
-    collectOrder(order, function(pizza) {
-      eatPizza(pizza);
-    }, failureCallback);
-  }, failureCallback);
+```js
+chooseToppings(function (toppings) {
+  placeOrder(
+    toppings,
+    function (order) {
+      collectOrder(
+        order,
+        function (pizza) {
+          eatPizza(pizza);
+        },
+        failureCallback
+      );
+    },
+    failureCallback
+  );
 }, failureCallback);
 ```
 
@@ -30,46 +38,40 @@ chooseToppings(function(toppings) {
 
 - Promises make situations like the above much easier to write, parse, and run.
 
-```
+```js
 chooseToppings()
-.then(function(toppings) {
-  return placeOrder(toppings);
-})
-.then(function(order) {
-  return collectOrder(order);
-})
-.then(function(pizza) {
-  eatPizza(pizza);
-})
-.catch(failureCallback);
+  .then(function (toppings) {
+    return placeOrder(toppings);
+  })
+  .then(function (order) {
+    return collectOrder(order);
+  })
+  .then(function (pizza) {
+    eatPizza(pizza);
+  })
+  .catch(failureCallback);
 ```
 
 - we only need a single .catch() block to handle all the errors,
 - We're able to chain multiple asynchronous actions to occur one after another this way because each .then() block returns a new promise that resolves when the .then() block is done running. Clever, right?
 - Using arrow functions, you can simplify the code even further:
 
-```
+```js
 chooseToppings()
-.then(toppings =>
-  placeOrder(toppings)
-)
-.then(order =>
-  collectOrder(order)
-)
-.then(pizza =>
-  eatPizza(pizza)
-)
-.catch(failureCallback);
+  .then((toppings) => placeOrder(toppings))
+  .then((order) => collectOrder(order))
+  .then((pizza) => eatPizza(pizza))
+  .catch(failureCallback);
 ```
 
 - Or even this:
 
-```
+```js
 chooseToppings()
-.then(toppings => placeOrder(toppings))
-.then(order => collectOrder(order))
-.then(pizza => eatPizza(pizza))
-.catch(failureCallback);
+  .then((toppings) => placeOrder(toppings))
+  .then((order) => collectOrder(order))
+  .then((pizza) => eatPizza(pizza))
+  .catch(failureCallback);
 ```
 
 - You could even do this, since the functions just pass their arguments directly, so there isn't any need for that extra layer of functions:
@@ -86,24 +88,26 @@ chooseToppings().then(placeOrder).then(collectOrder).then(eatPizza).catch(failur
 
 `Bear in mind that the value returned by a fulfilled promise becomes the parameter passed to the next .then() block's callback function.`
 
-```
-fetch('coffee.jpg')
-.then(response => {
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  } else {
-    return response.blob();
-  }
-})
-.then(myBlob => {
-  let objectURL = URL.createObjectURL(myBlob);
-  let image = document.createElement('img');
-  image.src = objectURL;
-  document.body.appendChild(image);
-})
-.catch(e => {
-  console.log('There has been a problem with your fetch operation: ' + e.message);
-});
+```js
+fetch("coffee.jpg")
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    } else {
+      return response.blob();
+    }
+  })
+  .then((myBlob) => {
+    let objectURL = URL.createObjectURL(myBlob);
+    let image = document.createElement("img");
+    image.src = objectURL;
+    document.body.appendChild(image);
+  })
+  .catch((e) => {
+    console.log(
+      "There has been a problem with your fetch operation: " + e.message
+    );
+  });
 ```
 
 `Note: .then()/.catch() blocks in promises are basically the async equivalent of a try...catch block in sync code. Bear in mind that synchronous try...catch won't work in async code.`
@@ -119,31 +123,31 @@ fetch('coffee.jpg')
 
 - There will be cases where you want to run a final block of code after a promise completes, regardless of whether it fulfilled or rejected. Previously you'd have to include the same code in both the .then() and .catch() callbacks, for example:
 
-```
+```js
 myPromise
-.then(response => {
-  doSomething(response);
-  runFinalCode();
-})
-.catch(e => {
-  returnError(e);
-  runFinalCode();
-});
+  .then((response) => {
+    doSomething(response);
+    runFinalCode();
+  })
+  .catch((e) => {
+    returnError(e);
+    runFinalCode();
+  });
 ```
 
 - In more recent modern browsers, the .finally() method is available, which can be chained onto the end of your regular promise chain allowing you to cut down on code repetition and do things more elegantly. The above code can now be written as follows:
 
-```
+```js
 myPromise
-.then(response => {
-  doSomething(response);
-})
-.catch(e => {
-  returnError(e);
-})
-.finally(() => {
-  runFinalCode();
-});
+  .then((response) => {
+    doSomething(response);
+  })
+  .catch((e) => {
+    returnError(e);
+  })
+  .finally(() => {
+    runFinalCode();
+  });
 ```
 
 `Note: then()/catch()/finally() is the async equivalent to try/catch/finally in sync code.`
@@ -159,22 +163,21 @@ myPromise
 
 - Let's have a look at a simple example to get you started — here we wrap a setTimeout() call with a promise — this runs a function after two seconds that resolves the promise (using the passed resolve() call) with a string of "Success!".
 
-```
+```js
 let timeoutPromise = new Promise((resolve, reject) => {
   setTimeout(() => {
-    resolve('Success!');
+    resolve("Success!");
   }, 2000);
 });
 ```
 
-- resolve() and reject() are functions that you call to fulfil or reject the newly-created promise. In this case, the promise fulfills with a string of "Success!".
+- **resolve() and reject() are functions that you call to fulfil or reject the newly-created promise.** In this case, the promise fulfills with a string of "Success!".
 - So when you call this promise, you can chain a .then() block onto the end of it and it will be passed a string of "Success!". In the below code we alert that message:
 
-```
-timeoutPromise
-.then((message) => {
-   alert(message);
-})
+```js
+timeoutPromise.then((message) => {
+  alert(message);
+});
 ```
 
 - or even just
@@ -193,33 +196,33 @@ timeoutPromise.then(alert);
 
 - Let's extend the previous example to have some reject() conditions as well as allowing different messages to be passed upon success.
 
-```
+```js
 function timeoutPromise(message, interval) {
   return new Promise((resolve, reject) => {
-    if (message === '' || typeof message !== 'string') {
-      reject('Message is empty or not a string');
-    } else if (interval < 0 || typeof interval !== 'number') {
-      reject('Interval is negative or not a number');
+    if (message === "" || typeof message !== "string") {
+      reject("Message is empty or not a string");
+    } else if (interval < 0 || typeof interval !== "number") {
+      reject("Interval is negative or not a number");
     } else {
       setTimeout(() => {
         resolve(message);
       }, interval);
     }
   });
-};
+}
 ```
 
 - Inside the Promise constructor, we do several checks inside if ... else structures:
 - Since the timeoutPromise() function returns a Promise, we can chain .then(), .catch(), etc. onto it to make use of its functionality. Let's use it now — replace the previous timeoutPromise usage with this one:
 
-```
-timeoutPromise('Hello there!', 1000)
-.then(message => {
-   alert(message);
-})
-.catch(e => {
-  console.log('Error: ' + e);
-});
+```js
+timeoutPromise("Hello there!", 1000)
+  .then((message) => {
+    alert(message);
+  })
+  .catch((e) => {
+    console.log("Error: " + e);
+  });
 ```
 
 ## Using Promises
@@ -228,7 +231,7 @@ timeoutPromise('Hello there!', 1000)
 - Essentially, a promise is a returned object to which you attach callbacks, instead of passing callbacks into a function.
 - Imagine a function, createAudioFileAsync(), which asynchronously generates a sound file given a configuration record and two callback functions, one called if the audio file is successfully created, and the other called if an error occurs.
 
-```
+```js
 function successCallback(result) {
   console.log("Audio file ready at URL: " + result);
 }
@@ -261,29 +264,35 @@ createAudioFileAsync(audioSettings).then(successCallback, failureCallback);
 - We accomplish this by creating a promise chain.
 - Here's the magic: the then() function returns a new promise, different from the original:
 
-```
+```js
 const promise = doSomething();
 const promise2 = promise.then(successCallback, failureCallback);
-
 ```
 
 ##### **OR**
 
-```
+```js
 const promise2 = doSomething().then(successCallback, failureCallback);
-
 ```
 
 - This second promise (promise2) represents the completion not just of doSomething(), but also of the successCallback or failureCallback you passed in, which can be other asynchronous functions returning a promise. When that's the case, any callbacks added to promise2 get queued behind the promise returned by either successCallback or failureCallback.
 - In the old days, doing several asynchronous operations in a row would lead to the classic callback pyramid of doom:
 
-```
-doSomething(function(result) {
-  doSomethingElse(result, function(newResult) {
-    doThirdThing(newResult, function(finalResult) {
-      console.log('Got the final result: ' + finalResult);
-    }, failureCallback);
-  }, failureCallback);
+```js
+doSomething(function (result) {
+  doSomethingElse(
+    result,
+    function (newResult) {
+      doThirdThing(
+        newResult,
+        function (finalResult) {
+          console.log("Got the final result: " + finalResult);
+        },
+        failureCallback
+      );
+    },
+    failureCallback
+  );
 }, failureCallback);
 ```
 
@@ -291,23 +300,23 @@ doSomething(function(result) {
 
 - It's possible to chain after a failure, i.e. a catch, which is useful to accomplish new actions even after an action failed in the chain. Read the following example:
 
-```
+```js
 new Promise((resolve, reject) => {
-    console.log('Initial');
+  console.log("Initial");
 
-    resolve();
+  resolve();
 })
-.then(() => {
-    throw new Error('Something failed');
+  .then(() => {
+    throw new Error("Something failed");
 
-    console.log('Do this');
-})
-.catch(() => {
-    console.error('Do that');
-})
-.then(() => {
-    console.log('Do this, no matter what happened before');
-});
+    console.log("Do this");
+  })
+  .catch(() => {
+    console.error("Do that");
+  })
+  .then(() => {
+    console.log("Do this, no matter what happened before");
+  });
 ```
 
 - This will output the following text:
@@ -324,23 +333,23 @@ Do this, no matter what happened before
 
 - You might recall seeing failureCallback three times in the pyramid of doom earlier, compared to only once at the end of the promise chain:
 
-```
+```js
 doSomething()
-.then(result => doSomethingElse(result))
-.then(newResult => doThirdThing(newResult))
-.then(finalResult => console.log(`Got the final result: ${finalResult}`))
-.catch(failureCallback);
+  .then((result) => doSomethingElse(result))
+  .then((newResult) => doThirdThing(newResult))
+  .then((finalResult) => console.log(`Got the final result: ${finalResult}`))
+  .catch(failureCallback);
 ```
 
 - If there's an exception, the browser will look down the chain for .catch() handlers or onRejected. This is very much modeled after how synchronous code works:
 
-```
+```js
 try {
   const result = syncDoSomething();
   const newResult = syncDoSomethingElse(result);
   const finalResult = syncDoThirdThing(newResult);
   console.log(`Got the final result: ${finalResult}`);
-} catch(error) {
+} catch (error) {
   failureCallback(error);
 }
 ```
@@ -367,17 +376,19 @@ async function foo() {
 - A Promise can be created from scratch using its constructor. This should be needed only to wrap old APIs.
 - In an ideal world, all asynchronous functions would already return promises. Unfortunately, some APIs still expect success and/or failure callbacks to be passed in the old way. The most obvious example is the setTimeout() function:
 
-```
-setTimeout(() => saySomething("10 seconds passed"), 10*1000);
+```js
+setTimeout(() => saySomething("10 seconds passed"), 10 * 1000);
 ```
 
 - Mixing old-style callbacks and promises is problematic. If saySomething() fails or contains a programming error, nothing catches it. setTimeout is to blame for this.
 - Luckily we can wrap setTimeout in a promise. Best practice is to wrap problematic functions at the lowest possible level, and then never call them directly again:
 
-```
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+```js
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-wait(10*1000).then(() => saySomething("10 seconds")).catch(failureCallback);
+wait(10 * 1000)
+  .then(() => saySomething("10 seconds"))
+  .catch(failureCallback);
 ```
 
 - Basically, the promise constructor takes an executor function that lets us resolve or reject a promise manually. Since setTimeout() doesn't really fail, we left out reject in this case.
@@ -390,9 +401,10 @@ wait(10*1000).then(() => saySomething("10 seconds")).catch(failureCallback);
 
 - We can start operations in parallel and wait for them all to finish like this:
 
-```
-Promise.all([func1(), func2(), func3()])
-.then(([result1, result2, result3]) => { /* use result1, result2 and result3 */ });
+```js
+Promise.all([func1(), func2(), func3()]).then(([result1, result2, result3]) => {
+  /* use result1, result2 and result3 */
+});
 ```
 
 - Sequential composition is possible using some clever JavaScript:
@@ -405,14 +417,17 @@ Promise.all([func1(), func2(), func3()])
 - Basically, we reduce an array of asynchronous functions down to a promise chain equivalent to: Promise.resolve().then(func1).then(func2).then(func3);
 - This can be made into a reusable compose function, which is common in functional programming:
 
-```
-const applyAsync = (acc,val) => acc.then(val);
-const composeAsync = (...funcs) => x => funcs.reduce(applyAsync, Promise.resolve(x));
+```js
+const applyAsync = (acc, val) => acc.then(val);
+const composeAsync =
+  (...funcs) =>
+  (x) =>
+    funcs.reduce(applyAsync, Promise.resolve(x));
 ```
 
 - The composeAsync() function will accept any number of functions as arguments, and will return a new function that accepts an initial value to be passed through the composition pipeline:
 
-```
+```js
 const transformData = composeAsync(func1, func2, func3);
 const result3 = transformData(data);
 ```
@@ -431,18 +446,20 @@ for (const f of [func1, func2, func3]) {
 
 - To avoid surprises, functions passed to then() will never be called synchronously, even with an already-resolved promise:
 
-```
+```js
 Promise.resolve().then(() => console.log(2));
 console.log(1); // 1, 2
 ```
 
 - Instead of running immediately, the passed-in function is put on a microtask queue, which means it runs later (only after the function which created it exits, and when the JavaScript execution stack is empty), just before control is returned to the event loop; i.e. pretty soon:
 
-```
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+```js
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 wait(0).then(() => console.log(4));
-Promise.resolve().then(() => console.log(2)).then(() => console.log(3));
+Promise.resolve()
+  .then(() => console.log(2))
+  .then(() => console.log(3));
 console.log(1); // 1, 2, 3, 4
 ```
 
@@ -450,16 +467,16 @@ console.log(1); // 1, 2, 3, 4
 
 - Promise callbacks are handled as a Microtask whereas setTimeout() callbacks are handled as Task queues.
 
-```
-const promise = new Promise(function(resolve, reject) {
+```js
+const promise = new Promise(function (resolve, reject) {
   console.log("Promise callback");
   resolve();
-}).then(function(result) {
+}).then(function (result) {
   console.log("Promise callback (.then)");
 });
 
-setTimeout(function() {
-  console.log("event-loop cycle: Promise (fulfilled)", promise)
+setTimeout(function () {
+  console.log("event-loop cycle: Promise (fulfilled)", promise);
 }, 0);
 
 console.log("Promise (pending)", promise);
@@ -478,9 +495,9 @@ event-loop cycle: Promise (fulfilled) Promise {<fulfilled>}
 
 - There are 3 ways you could want promises to resolve, parallel (all together), sequential (1 after another), or a race (doesn't matter who wins).
 
-```
+```js
 const promisify = (item, delay) =>
-  new Promise(resolve => setTimeout(() => resolve(item), delay));
+  new Promise((resolve) => setTimeout(() => resolve(item), delay));
 
 const a = () => promisify("a", 100);
 const b = () => promisify("b", 5000);
@@ -512,4 +529,91 @@ race().then(console.log);
 // race is done: a
 // parallel is done: a b c
 // sequence is done: a b c
+```
+
+#### **EXAMPLE**
+
+```js
+// Promise Consuming
+
+// manual error handling: rejected promise do not thow error...we have to manually throw error
+// making two related async call
+
+function findCountry(country) {
+  fetch(`https://restcountries.eu/rest/v2/name/${country}`) //fetch returns promise
+    .then((response) => {
+      if (!response.ok)
+        throw new Error(`Country not found (${response.status})`);
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data[0]);
+      console.log(`Capital of ${data[0].name} is ${data[0].capital} `);
+      const neighbour = data[0].borders[0];
+      if (!neighbour) throw new Error("No neighbour found");
+      return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbour}`);
+    })
+    .then((response) => {
+      if (!response.ok)
+        throw new Error(`Country not found (${response.status})`);
+      return response.json();
+    })
+    .then((data) => {
+      console.log(`Neighbour Country is ${data.name}`);
+    })
+    .catch((err) => console.error(err.message));
+}
+
+findCountry("canada");
+```
+
+```js
+// =========================Minimizing above code==============================
+function getJSON(url, errMsg) {
+  return fetch(url).then((response) => {
+    if (!response.ok) throw new Error(`${errMsg}(${response.status})`);
+    return response.json();
+  });
+}
+
+function findCountry(country) {
+  getJSON(
+    `https://restcountries.eu/rest/v2/name/${country}`,
+    "Country Not Found!"
+  )
+    .then((data) => {
+      console.log(`Capital of ${data[0].name} is ${data[0].capital} `);
+      const neighbour = data[0].borders[0];
+      if (!neighbour) throw new Error("No neighbour found");
+      return getJSON(
+        `https://restcountries.eu/rest/v2/alpha/${neighbour}`,
+        "Country Not Found!"
+      );
+    })
+
+    .then((data) => {
+      console.log(`Neighbour Country is ${data.name}`);
+    })
+    .catch((err) => console.error(err.message));
+}
+
+findCountry("canada");
+```
+
+#### Event loop & micro task
+
+```js
+// Notice the order of printing in console
+// setTimer callback function after the exacusting of timer get to the "callback queue"
+// promise once fullfilled get into "microtask queue"
+// "microtask queue" has higher priority over "callback queue"
+console.log("Test Start"); // 1st to print
+setTimeout(() => console.log("0 sec timer"), 0); // even though timer is of 0 secds...callback function will only run if all the micro task is complete...how much time it take
+Promise.resolve("Resolved promise 1").then((res) => console.log(res)); // 3rd to print
+Promise.resolve("Resolved promise 2").then((res) => {
+  for (let i = 0; i < 1000000000; i++) {}
+  console.log(res); // 4th to print
+});
+
+console.log("Test End"); // 2nd to print
 ```
